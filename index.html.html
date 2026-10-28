@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Pelanggan WiFi NSNET</title>
+<!-- Include html2canvas library if needed -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{--navy:#0b1926;--card-bg:#102a43;--blue:#1677ff;--light:#183b56;--line:#1e3a5f;--text:#e2e8f0}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#060f18,#0b1926 55%,#0f2942);color:var(--text);min-height:100vh;padding:24px}
+.wrap{max-width:1000px;margin:auto}
+header{background:linear-gradient(120deg,#0a1b2d,#1a6fc4);color:#fff;padding:32px 28px;border-radius:18px 18px 0 0;box-shadow:0 4px 20px rgba(0,0,0,0.3);text-align:center}
+header h1{margin:0 0 8px;font-size:clamp(24px,4vw,34px);letter-spacing:.5px}
+header p{margin:0;color:#dbeafe;line-height:1.5}
+form,.records{background:var(--card-bg);padding:26px;border:1px solid var(--line);box-shadow:0 12px 30px rgba(0,0,0,0.4)}
+.section-title{font-size:16px;font-weight:700;color:#fff;margin:4px 0 18px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.field.full{grid-column:1/-1}
+label{font-size:13px;font-weight:700;color:#9fb3c8}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:12px;font:inherit;background:#0b1926;color:#fff}
+input:focus,select:focus,textarea:focus{outline:2px solid #bfdbfe;border-color:var(--blue)}
+textarea{min-height:82px;resize:vertical}
+.hint{font-size:12px;color:#94a3b8;line-height:1.45}
+.location-row,.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.primary{background:var(--blue);color:#fff}.secondary{background:#183b56;color:#fff;border:1px solid var(--line)}.danger{background:#7f1d1d;color:#fecaca}.success{background:#10b981;color:#fff}
+.photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.photo-card{border:1px dashed var(--line);border-radius:12px;padding:14px;background:#0b1926}
+.photo-card label{display:block;margin-bottom:10px}
+.preview{width:100%;height:145px;object-fit:contain;background:#183b56;border-radius:8px;margin-top:10px;display:none}
+.actions{margin-top:24px}
+.records{border-top:0;border-radius:0 0 18px 18px}
+.record{padding:14px;border:1px solid var(--line);border-radius:10px;margin-top:10px;display:flex;justify-content:space-between;gap:12px;align-items:center;background:#0b1926}
+.record strong{display:block;margin-bottom:5px;color:#fff}.record small{color:#9fb3c8}
+
+/* Modal / Popup Style */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(5,11,18,0.85);display:none;justify-content:center;align-items:center;z-index:9999;padding:16px}
+.modal-content{background:#102a43;color:#fff;width:100%;max-width:750px;border-radius:16px;padding:24px;box-shadow:0 20px 40px rgba(0,0,0,0.6);max-height:90vh;overflow-y:auto;position:relative;border:1px solid var(--line)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:18px}
+.modal-header h3{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
+.close-modal{background:transparent;color:#fff;font-size:20px;cursor:pointer;padding:4px 8px;border:0}
+.modal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:20px}
+.modal-item label{font-size:11px;color:#9fb3c8;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px}
+.modal-item div{font-size:14px;color:#fff;font-weight:600}
+.modal-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
+.modal-photo-box{background:#0b1926;border-radius:10px;padding:10px;text-align:center;border:1px solid var(--line)}
+.modal-photo-box span{font-size:12px;color:#9fb3c8;display:block;margin-bottom:8px}
+.modal-photo-box img{width:100%;height:110px;object-fit:cover;border-radius:6px;background:#183b56}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;border-top:1px solid var(--line);padding-top:16px;flex-wrap:wrap}
+
+footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
+@media(max-width:650px){body{padding:12px}.grid{grid-template-columns:1fr}form,.records{padding:18px}.photos{grid-template-columns:1fr}.photo-card{display:grid;grid-template-columns:1fr}.preview{height:180px}.record{align-items:flex-start;flex-direction:column}.modal-grid{grid-template-columns:1fr}.modal-photos{grid-template-columns:1fr}}
+@media print{body{background:#fff;color:#000;padding:0}header{border-radius:0}form,.records{box-shadow:none;background:#fff;color:#000}.actions,button,.records,.modal-overlay{display:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>DATA PELANGGAN NSNET</h1>
+  <p>Formulir pendataan pelanggan — isi data dengan benar, lalu simpan data anda</p>
+</header>
+<form id="customerForm">
+  <input type="hidden" id="editIndex" value="-1">
+  <div class="section-title">Identitas Pelanggan</div>
+  <div class="grid">
+    <div class="field"><label for="nik">NIK</label><input id="nik" name="nik" inputmode="numeric" maxlength="16" placeholder="Masukkan 16 digit NIK" required><span class="hint">Data identitas bersifat pribadi. Simpan file di perangkat yang aman.</span></div>
+    <div class="field"><label for="nama">Nama Pelanggan</label><input id="nama" name="nama" placeholder="Nama lengkap sesuai KTP" required></div>
+    <div class="field"><label for="jk">Jenis Kelamin</label><select id="jk" name="jenis_kelamin" required><option value="">-- Pilih jenis kelamin --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
+    <div class="field"><label for="pekerjaan">Pekerjaan</label><input id="pekerjaan" name="pekerjaan" placeholder="Contoh: Wiraswasta"></div>
+    <div class="field full"><label for="alamat">Alamat</label><textarea id="alamat" name="alamat" placeholder="Jalan, dusun/kelurahan, kecamatan, kabupaten" required></textarea></div>
+    <div class="field"><label for="hp">Nomor Handphone / WhatsApp</label><input id="hp" name="nomor_handphone" type="tel" placeholder="Contoh: 08xxxxxxxxxx" required></div>
+    <div class="field"><label for="tanggal">Tanggal Pendataan</label><input id="tanggal" name="tanggal_pendataan" type="date"></div>
+    <div class="field full"><label>Titik Lokasi Rumah Pelanggan</label>
+      <div class="location-row"><input id="lokasi" name="titik_lokasi" placeholder="Koordinat GPS atau tautan Google Maps"><button type="button" class="secondary" id="getLocation">Ambil Lokasi GPS Rumah Anda </button></div>
+      <span class="hint">Izinkan akses lokasi pada browser</span>
+    </div>
+  </div>
+  <div class="section-title" style="margin-top:28px">Dokumentasi Pelanggan</div>
+  <div class="photos">
+    <div class="photo-card">
+      <label for="ktp">FOTO KTP</label>
+      <input id="ktp" type="file" accept="image/*" data-photo="foto_ktp">
+      <img class="preview" id="prev-ktp" alt="Pratinjau foto KTP">
+      <div style="margin-top:8px;">
+        <button type="button" class="secondary" id="dl-btn-ktp" style="display:none;width:100%;font-size:12px;padding:8px;justify-content:center;" onclick="downloadSinglePhoto('foto_ktp', 'ktp')">📥 Unduh Foto KTP</button>
+      </div>
+      <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur</span>
+    </div>
+    <div class="photo-card">
+      <label for="rumah">FOTO RUMAH</label>
+      <input id="rumah" type="file" accept="image/*" data-photo="foto_rumah">
+      <img class="preview" id="prev-rumah" alt="Pratinjau foto rumah">
+      <div style="margin-top:8px;">
+        <button type="button" class="secondary" id="dl-btn-rumah" style="display:none;width:100%;font-size:12px;padding:8px;justify-content:center;" onclick="downloadSinglePhoto('foto_rumah', 'rumah')">📥 Unduh Foto Rumah</button>
+      </div>
+      <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur</span>
+    </div>
+    <div class="photo-card">
+      <label for="alat">FOTO ALAT WIFI</label>
+      <input id="alat" type="file" accept="image/*" data-photo="foto_alat_wifi">
+      <img class="preview" id="prev-alat" alt="Pratinjau alat WiFi">
+      <div style="margin-top:8px;">
+        <button type="button" class="secondary" id="dl-btn-alat" style="display:none;width:100%;font-size:12px;padding:8px;justify-content:center;" onclick="downloadSinglePhoto('foto_alat_wifi', 'alat')">📥 Unduh Foto Alat WiFi</button>
+      </div>
+      <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur</span>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="primary" type="submit" id="submitBtn">SIMPAN DATA</button>
+    <button class="secondary" type="button" id="download">Ekspor JSON</button>
+    <button class="secondary" type="button" id="importJsonBtn">Impor JSON</button>
+    <button class="secondary" type="button" id="exportCsv">Ekspor CSV</button>
+	<input type="file" id="importJsonFile" accept=".json" style="display:none">
+    <button class="secondary" type="button" onclick="window.print()">Cetak Formulir</button>
+  </div>
+  <p class="hint">Data yang disimpan pada halaman ini tersimpan di penyimpanan browser perangkat ini</p>
+</form>
+<section class="records">
+  <div class="section-title">Data Tersimpan di Perangkat Ini</div>
+  <div id="recordList"><span class="hint">Belum ada data yang disimpan.</span></div>
+  <div class="actions"><button type="button" class="danger" id="clearAll">Hapus Semua Data Tersimpan</button></div>
+</section>
+<footer>Formulir Data Pelanggan WiFi • Simpan data pribadi dengan aman dan batasi akses hanya kepada petugas berwenang.</footer>
+</div>
+
+<!-- Modal Pratinjau Detail Pelanggan -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal-content" id="modalCardContent">
+    <div class="modal-header">
+      <h3 id="modalTitle">📁 Detail Pelanggan</h3>
+      <button class="close-modal" id="closeModal">×</button>
+    </div>
+    <div class="modal-grid">
+      <div class="modal-item"><label>NIK</label><div id="m-nik">-</div></div>
+      <div class="modal-item"><label>Nama Pelanggan</label><div id="m-nama">-</div></div>
+      <div class="modal-item"><label>Jenis Kelamin</label><div id="m-jk">-</div></div>
+      <div class="modal-item"><label>Pekerjaan</label><div id="m-pekerjaan">-</div></div>
+      <div class="modal-item"><label>Nomor HP / WhatsApp</label><div id="m-hp" style="color:#60a5fa">-</div></div>
+      <div class="modal-item"><label>Tanggal Pendataan</label><div id="m-tanggal">-</div></div>
+      <div class="modal-item full" style="grid-column:1/-1"><label>Titik Koordinat / Maps</label><div id="m-lokasi">-</div></div>
+      <div class="modal-item full" style="grid-column:1/-1"><label>Alamat Lengkap</label><div id="m-alamat">-</div></div>
+    </div>
+    
+    <div style="font-size:13px;font-weight:700;color:#9fb3c8;margin-bottom:8px;text-transform:uppercase;">Dokumen Lampiran Foto</div>
+    <div class="modal-photos">
+      <div class="modal-photo-box">
+        <span>Foto KTP</span>
+        <img id="m-foto-ktp" src="" alt="Belum ada foto" style="display:none">
+        <div id="m-foto-ktp-empty" style="font-size:11px;color:#94a3b8;padding:30px 0;">Tidak ada foto</div>
+        <button type="button" class="secondary" id="m-dl-ktp" style="display:none;width:100%;font-size:11px;padding:6px;margin-top:8px;justify-content:center;">📥 Unduh</button>
+      </div>
+      <div class="modal-photo-box">
+        <span>Foto Rumah</span>
+        <img id="m-foto-rumah" src="" alt="Belum ada foto" style="display:none">
+        <div id="m-foto-rumah-empty" style="font-size:11px;color:#94a3b8;padding:30px 0;">Tidak ada foto</div>
+        <button type="button" class="secondary" id="m-dl-rumah" style="display:none;width:100%;font-size:11px;padding:6px;margin-top:8px;justify-content:center;">📥 Unduh</button>
+      </div>
+      <div class="modal-photo-box">
+        <span>Foto Alat WiFi</span>
+        <img id="m-foto-alat" src="" alt="Belum ada foto" style="display:none">
+        <div id="m-foto-alat-empty" style="font-size:11px;color:#94a3b8;padding:30px 0;">Tidak ada foto</div>
+        <button type="button" class="secondary" id="m-dl-alat" style="display:none;width:100%;font-size:11px;padding:6px;margin-top:8px;justify-content:center;">📥 Unduh</button>
+      </div>
+    </div>
+
+    <!-- Tombol di bagian bawah modal hanya menyisakan tombol Tutup -->
+    <div class="modal-actions">
+      <button type="button" class="secondary" id="m-closeBtn" style="background:#1e3a5f;">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const form=document.getElementById('customerForm');
+let photoCache = {};
+
+const photoInputs=[...document.querySelectorAll('input[type="file"][data-photo]')];
+photoInputs.forEach(input=>input.addEventListener('change',()=>{
+  const img=document.getElementById('prev-'+input.id);
+  const dlBtn=document.getElementById('dl-btn-'+input.id);
+  const file=input.files && input.files[0];
+  if(file){
+    const url = URL.createObjectURL(file);
+    img.src=url;
+    img.style.display='block';
+    if(dlBtn) dlBtn.style.display='inline-flex';
+    photoCache[input.dataset.photo] = url;
+  }else{
+    img.removeAttribute('src');
+    img.style.display='none';
+    if(dlBtn) dlBtn.style.display='none';
+  }
+}));
+
+function downloadSinglePhoto(photoKey, typeName){
+  const url = photoCache[photoKey];
+  if(!url){alert('Tidak ada foto untuk diunduh.');return;}
+  const a = document.createElement('a');
+  a.href = url;
+  const nikVal = document.getElementById('nik').value.trim() || 'pelanggan';
+  a.download = `foto-${typeName}-${nikVal}.jpg`;
+  a.click();
+}
+
+document.getElementById('getLocation').addEventListener('click',()=>{
+  const field=document.getElementById('lokasi');
+  if(!navigator.geolocation){alert('Browser ini tidak mendukung GPS. Silakan masukkan lokasi secara manual.');return;}
+  field.value='Mengambil lokasi...';
+  navigator.geolocation.getCurrentPosition(pos=>{
+    field.value=pos.coords.latitude.toFixed(6)+', '+pos.coords.longitude.toFixed(6);
+  },err=>{field.value='';alert('Lokasi tidak dapat diambil. Periksa izin lokasi browser atau isi secara manual.');},{enableHighAccuracy:true,timeout:12000});
+});
+
+function getRecords(){try{return JSON.parse(localStorage.getItem('wifi_customer_records')||'[]')}catch(e){return []}}
+
+function showRecords(){
+  const list=document.getElementById('recordList'), records=getRecords();
+  if(!records.length){list.innerHTML='<span class="hint">Belum ada data yang disimpan.</span>';return;}
+  list.innerHTML='';
+  records.forEach((r,i)=>{
+    const div=document.createElement('div');div.className='record';
+    const info=document.createElement('div');
+    const strong=document.createElement('strong');strong.textContent=r.nama||'(Tanpa nama)';
+    const small=document.createElement('small');small.textContent='NIK: '+(r.nik||'-')+' • HP: '+(r.nomor_handphone||'-')+' • '+(r.tanggal_pendataan||'Tanggal tidak diisi');
+    info.append(strong,small);
+    
+    const actions=document.createElement('div');
+    actions.style.display = 'flex';
+    actions.style.gap = '6px';
+
+    const view=document.createElement('button');view.className='secondary';view.innerHTML='👁️ Lihat';view.onclick=()=>openDetailModal(r);
+    const edit=document.createElement('button');edit.className='secondary';edit.innerHTML='✏️ Edit';edit.onclick=()=>editRecord(i);
+    const del=document.createElement('button');del.className='danger';del.innerHTML='🗑️ Hapus';del.onclick=()=>{if(confirm('Hapus data '+(r.nama||'ini')+'?')){const arr=getRecords();arr.splice(i,1);localStorage.setItem('wifi_customer_records',JSON.stringify(arr));showRecords();}};
+    
+    actions.append(view,edit,del);
+    div.append(info,actions);
+    list.append(div);
+  });
+}
+
+function openDetailModal(r){
+  document.getElementById('modalTitle').textContent = '📁 Detail Pelanggan: ' + (r.nama || '');
+  document.getElementById('m-nik').textContent = r.nik || '-';
+  document.getElementById('m-nama').textContent = r.nama || '-';
+  document.getElementById('m-jk').textContent = r.jenis_kelamin || '-';
+  document.getElementById('m-pekerjaan').textContent = r.pekerjaan || '-';
+  document.getElementById('m-hp').textContent = r.nomor_handphone || '-';
+  document.getElementById('m-tanggal').textContent = r.tanggal_pendataan || '-';
+  document.getElementById('m-lokasi').textContent = r.titik_lokasi || '-';
+  document.getElementById('m-alamat').textContent = r.alamat || '-';
+
+  const ktpImg = document.getElementById('m-foto-ktp');
+  const ktpEmpty = document.getElementById('m-foto-ktp-empty');
+  const ktpDl = document.getElementById('m-dl-ktp');
+  if(r.foto_ktp){ 
+    ktpImg.src = r.foto_ktp; ktpImg.style.display='block'; ktpEmpty.style.display='none'; ktpDl.style.display='inline-flex';
+    ktpDl.onclick = () => { triggerDownload(r.foto_ktp, 'foto-ktp-' + (r.nik || 'wifi')); };
+  } else { 
+    ktpImg.style.display='none'; ktpEmpty.style.display='block'; ktpDl.style.display='none'; 
+  }
+
+  const rumahImg = document.getElementById('m-foto-rumah');
+  const rumahEmpty = document.getElementById('m-foto-rumah-empty');
+  const rumahDl = document.getElementById('m-dl-rumah');
+  if(r.foto_rumah){ 
+    rumahImg.src = r.foto_rumah; rumahImg.style.display='block'; rumahEmpty.style.display='none'; rumahDl.style.display='inline-flex';
+    rumahDl.onclick = () => { triggerDownload(r.foto_rumah, 'foto-rumah-' + (r.nik || 'wifi')); };
+  } else { 
+    rumahImg.style.display='none'; rumahEmpty.style.display='block'; rumahDl.style.display='none'; 
+  }
+
+  const alatImg = document.getElementById('m-foto-alat');
+  const alatEmpty = document.getElementById('m-foto-alat-empty');
+  const alatDl = document.getElementById('m-dl-alat');
+  if(r.foto_alat_wifi){ 
+    alatImg.src = r.foto_alat_wifi; alatImg.style.display='block'; alatEmpty.style.display='none'; alatDl.style.display='inline-flex';
+    alatDl.onclick = () => { triggerDownload(r.foto_alat_wifi, 'foto-alat-' + (r.nik || 'wifi')); };
+  } else { 
+    alatImg.style.display='none'; alatEmpty.style.display='block'; alatDl.style.display='none'; 
+  }
+
+  document.getElementById('detailModal').style.display = 'flex';
+}
+
+function triggerDownload(dataUrl, filename){
+  const a = document.createElement('a');
+  a.href = dataUrl;
+  a.download = filename + '.jpg';
+  a.click();
+}
+
+function closeModalFunc(){
+  document.getElementById('detailModal').style.display = 'none';
+}
+document.getElementById('closeModal').onclick = closeModalFunc;
+document.getElementById('m-closeBtn').onclick = closeModalFunc;
+document.getElementById('detailModal').onclick = (e)=>{ if(e.target === document.getElementById('detailModal')) closeModalFunc(); };
+
+function readForm(){
+  const data={};
+  new FormData(form).forEach((v,k)=>{if(typeof v==='string')data[k]=v.trim()});
+  data.dibuat_pada=new Date().toISOString();
+  if(photoCache.foto_ktp) data.foto_ktp = photoCache.foto_ktp;
+  if(photoCache.foto_rumah) data.foto_rumah = photoCache.foto_rumah;
+  if(photoCache.foto_alat_wifi) data.foto_alat_wifi = photoCache.foto_alat_wifi;
+  return data;
+}
+
+function editRecord(index){
+  const records = getRecords();
+  const r = records[index];
+  if(!r) return;
+  document.getElementById('editIndex').value = index;
+  document.getElementById('nik').value = r.nik || '';
+  document.getElementById('nama').value = r.nama || '';
+  document.getElementById('jk').value = r.jenis_kelamin || '';
+  document.getElementById('pekerjaan').value = r.pekerjaan || '';
+  document.getElementById('alamat').value = r.alamat || '';
+  document.getElementById('hp').value = r.nomor_handphone || '';
+  document.getElementById('tanggal').value = r.tanggal_pendataan || '';
+  document.getElementById('lokasi').value = r.titik_lokasi || '';
+  
+  if(r.foto_ktp) { photoCache.foto_ktp = r.foto_ktp; const img=document.getElementById('prev-ktp'); img.src=r.foto_ktp; img.style.display='block'; const btn=document.getElementById('dl-btn-ktp'); if(btn) btn.style.display='inline-flex'; }
+  if(r.foto_rumah) { photoCache.foto_rumah = r.foto_rumah; const img=document.getElementById('prev-rumah'); img.src=r.foto_rumah; img.style.display='block'; const btn=document.getElementById('dl-btn-rumah'); if(btn) btn.style.display='inline-flex'; }
+  if(r.foto_alat_wifi) { photoCache.foto_alat_wifi = r.foto_alat_wifi; const img=document.getElementById('prev-alat'); img.src=r.foto_alat_wifi; img.style.display='block'; const btn=document.getElementById('dl-btn-alat'); if(btn) btn.style.display='inline-flex'; }
+
+  document.getElementById('submitBtn').textContent = 'Perbarui Data';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+form.addEventListener('submit',e=>{
+  e.preventDefault();
+  const nik=document.getElementById('nik').value.trim();
+  if(!/^\d{16}$/.test(nik)){alert('NIK harus terdiri dari 16 digit angka.');return;}
+  const data=readForm();
+  const editIndex = parseInt(document.getElementById('editIndex').value);
+  try{
+    const records=getRecords();
+    if(editIndex >= 0){
+      records[editIndex] = data;
+      document.getElementById('editIndex').value = -1;
+      document.getElementById('submitBtn').textContent = 'Simpan Data';
+      alert('Data pelanggan berhasil diperbarui!');
+    } else {
+      records.unshift(data);
+      alert('Data pelanggan berhasil disimpan di browser perangkat ini.');
+    }
+    localStorage.setItem('wifi_customer_records',JSON.stringify(records));
+    showRecords();
+    form.reset();
+    photoCache = {};
+  }
+  catch(err){alert('Penyimpanan browser penuh atau tidak tersedia.');}
+});
+
+document.getElementById('download').addEventListener('click',()=>{
+  const records = getRecords();
+  if(!records.length){alert('Belum ada data tersimpan untuk diekspor.');return;}
+  const blob=new Blob([JSON.stringify(records,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='semua-data-pelanggan-wifi.json';a.click();URL.revokeObjectURL(url);
+});
+
+document.getElementById('exportCsv').addEventListener('click',()=>{
+  const records = getRecords();
+  if(!records.length){alert('Belum ada data tersimpan untuk diekspor ke CSV.');return;}
+  const keys = ['nik','nama','jenis_kelamin','pekerjaan','alamat','nomor_handphone','tanggal_pendataan','titik_lokasi','dibuat_pada'];
+  let csv = keys.join(',') + '\n';
+  records.forEach(r=>{
+    csv += keys.map(k => `"${(r[k]||'').replace(/"/g, '""')}"`).join(',') + '\n';
+  });
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='data-pelanggan-wifi.csv';a.click();URL.revokeObjectURL(url);
+});
+
+document.getElementById('importJsonBtn').addEventListener('click',()=>document.getElementById('importJsonFile').click());
+document.getElementById('importJsonFile').addEventListener('change',(e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    try{
+      const imported = JSON.parse(evt.target.result);
+      const records = getRecords();
+      if(Array.isArray(imported)){
+        localStorage.setItem('wifi_customer_records', JSON.stringify([...imported, ...records]));
+      } else if(typeof imported === 'object' && imported.nik){
+        records.unshift(imported);
+        localStorage.setItem('wifi_customer_records', JSON.stringify(records));
+      }
+      showRecords();
+      alert('Data berhasil diimpor!');
+    } catch(err){
+      alert('Gagal membaca file JSON. Pastikan format file benar.');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+document.getElementById('clearAll').addEventListener('click',()=>{
+  if(confirm('Yakin ingin menghapus SEMUA data pelanggan yang tersimpan di browser ini? Tindakan ini tidak dapat dibatalkan.')){localStorage.removeItem('wifi_customer_records');showRecords();}
+});
+
+form.addEventListener('reset',()=>{setTimeout(()=>{photoInputs.forEach(input=>{const img=document.getElementById('prev-'+input.id);img.removeAttribute('src');img.style.display='none';const dlBtn=document.getElementById('dl-btn-'+input.id);if(dlBtn)dlBtn.style.display='none';});document.getElementById('editIndex').value='-1';document.getElementById('submitBtn').textContent='Simpan Data';photoCache={};},0)});
+
+showRecords();
+</script>
+</body>
+</html>
