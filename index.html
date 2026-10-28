@@ -151,21 +151,21 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
 
 <form id="customerForm" autocomplete="off">
   <input type="hidden" id="editKey" value="">
-  <div class="section-title">Identitas Pelanggan</div>
+  <div class="section-title">IDENTITAS PELANGGAN</div>
   <div class="grid">
-    <div class="field"><label for="nik">NIK</label><input id="nik" name="nik" inputmode="numeric" maxlength="16" placeholder="Masukkan 16 digit NIK" autocomplete="off" required><span class="hint">Data identitas bersifat pribadi. Simpan file di perangkat yang aman.</span></div>
-    <div class="field"><label for="nama">Nama Pelanggan</label><input id="nama" name="nama" placeholder="Nama lengkap sesuai KTP" autocomplete="off" required></div>
-    <div class="field"><label for="jk">Jenis Kelamin</label><select id="jk" name="jenis_kelamin" required><option value="">-- Pilih jenis kelamin --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
-    <div class="field"><label for="pekerjaan">Pekerjaan</label><input id="pekerjaan" name="pekerjaan" placeholder="Contoh: Wiraswasta" autocomplete="off"></div>
-    <div class="field full"><label for="alamat">Alamat</label><textarea id="alamat" name="alamat" placeholder="Jalan, dusun/kelurahan, kecamatan, kabupaten" autocomplete="off" required></textarea></div>
-    <div class="field"><label for="hp">Nomor Handphone / WhatsApp</label><input id="hp" name="nomor_handphone" type="tel" placeholder="Contoh: 08xxxxxxxxxx" autocomplete="off" required></div>
-    <div class="field"><label for="tanggal">Tanggal Pendataan</label><input id="tanggal" name="tanggal_pendataan" type="date"></div>
-    <div class="field full"><label>Titik Lokasi Rumah Anda</label>
+    <div class="field"><label for="nik">MASUKAN NIK</label><input id="nik" name="nik" inputmode="numeric" maxlength="16" placeholder="Masukkan 16 digit NIK" autocomplete="off" required><span class="hint">Data identitas bersifat pribadi. Simpan file di perangkat yang aman.</span></div>
+    <div class="field"><label for="nama">NAMA LENGKAP</label><input id="nama" name="nama" placeholder="Nama lengkap sesuai KTP" autocomplete="off" required></div>
+    <div class="field"><label for="jk">JENIS KELAMIN</label><select id="jk" name="jenis_kelamin" required><option value="">-- Pilih jenis kelamin --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
+    <div class="field"><label for="pekerjaan">PEKERJAAN</label><input id="pekerjaan" name="pekerjaan" placeholder="Contoh: Wiraswasta" autocomplete="off"></div>
+    <div class="field full"><label for="alamat">ALAMAT LENGKAP</label><textarea id="alamat" name="alamat" placeholder="Jalan, dusun/kelurahan, kecamatan, kabupaten" autocomplete="off" required></textarea></div>
+    <div class="field"><label for="hp">NOMOR HANDPHONE / WHATSAPP</label><input id="hp" name="nomor_handphone" type="tel" placeholder="Contoh: 08xxxxxxxxxx" autocomplete="off" required></div>
+    <div class="field"><label for="tanggal">TANGGAL PENDATAAN</label><input id="tanggal" name="tanggal_pendataan" type="date"></div>
+    <div class="field full"><label>TITIK KOORDINAT LOKASI RUMAH</label>
       <div class="location-row"><input id="lokasi" name="titik_lokasi" placeholder="Koordinat GPS atau tautan Google Maps" autocomplete="off"><button type="button" class="secondary" id="getLocation">Ambil Lokasi GPS Rumah Anda </button></div>
-      <span class="hint">Izinkan akses lokasi pada browser</span>
+      <span class="hint">Izinkan Akses Lokasi Pada Browser</span>
     </div>
   </div>
-  <div class="section-title" style="margin-top:28px">Dokumentasi Pelanggan</div>
+  <div class="section-title" style="margin-top:28px">DOKUMENTASI PELANGGAN</div>
   <div class="photos">
     <div class="photo-card">
       <label for="ktp">FOTO KTP</label>
@@ -177,7 +177,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur</span>
     </div>
     <div class="photo-card">
-      <label for="rumah">FOTO RUMAH</label>
+      <label for="rumah">FOTO DEPAN RUMAH</label>
       <input id="rumah" type="file" accept="image/*" data-photo="foto_rumah">
       <img class="preview" id="prev-rumah" alt="Pratinjau foto rumah">
       <div style="margin-top:8px;">
@@ -186,7 +186,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur</span>
     </div>
     <div class="photo-card">
-      <label for="alat">FOTO ALAT WIFI</label>
+      <label for="alat">FOTO ALAT WIFI YANG TERPASANG</label>
       <input id="alat" type="file" accept="image/*" data-photo="foto_alat_wifi">
       <img class="preview" id="prev-alat" alt="Pratinjau alat WiFi">
       <div style="margin-top:8px;">
@@ -197,16 +197,16 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
   </div>
   <div class="actions">
     <button class="primary" type="submit" id="submitBtn">SIMPAN DATA</button>
-    <button class="secondary" type="button" id="adminDownloadJson">🔒 Ekspor JSON</button>
-    <button class="secondary" type="button" id="adminImportJson">🔒 Impor JSON</button>
-    <button class="secondary" type="button" id="adminExportCsv">🔒 Ekspor CSV</button>
+    <button class="secondary" type="button" id="adminDownloadJson">🔒 EKSPOR JSON</button>
+    <button class="secondary" type="button" id="adminImportJson">🔒 IMPOR JSON</button>
+    <button class="secondary" type="button" id="adminExportCsv">🔒 EKSPOR CSV</button>
 	<input type="file" id="importJsonFile" accept=".json" style="display:none">
-    <button class="secondary" type="button" id="adminPrintForm">🔒 Cetak Formulir</button>
+    <button class="secondary" type="button" id="adminPrintForm">🔒 CETAK FORMULIR</button>
   </div>
   <p class="hint">Data yang disimpan tersimpan di perangkat ini dan terkirim otomatis ke Realtime Database</p>
 </form>
 <section class="records">
-  <div class="section-title">Data Tersimpan Secara Online (Realtime Database)</div>
+  <div class="section-title">DATA TERSIMPAN SECARA ONLINE</div>
   <div id="recordList">
     <div style="padding:20px;text-align:center;">
       <p style="color:#9fb3c8;margin-bottom:12px;">🔒 Daftar data pelanggan dikunci demi keamanan privasi.</p>
@@ -215,7 +215,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
   </div>
   <div class="actions" style="margin-top:16px;"><button type="button" class="danger" id="clearAll">🔒 Hapus Semua Data Online</button></div>
 </section>
-<footer>Formulir Data Pelanggan WiFi • Simpan data pribadi dengan aman dan batasi akses hanya kepada petugas berwenang.</footer>
+<footer>Formulir Data Pelanggan WiFi • Simpan data pribadi dengan aman dan batasi akses hanya kepada petugas yang berwenang.</footer>
 </div>
 
 <!-- Modal Pratinjau Detail Pelanggan -->
