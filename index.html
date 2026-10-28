@@ -4,15 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Data Pelanggan WiFi NSNET</title>
-<!-- Firebase App SDK (Modular v10) -->
+<!-- Firebase App SDK & Realtime Database -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
   // KONFIGURASI FIREBASE PROJECT: nsnet-data-pelanggan
   const firebaseConfig = {
     apiKey: "GANTI_DENGAN_API_KEY_ANDA",
     authDomain: "nsnet-data-pelanggan.firebaseapp.com",
+    databaseURL: "https://nsnet-data-pelanggan-default-rtdb.firebaseio.com/",
     projectId: "nsnet-data-pelanggan",
     storageBucket: "nsnet-data-pelanggan.appspot.com",
     messagingSenderId: "GANTI_DENGAN_SENDER_ID",
@@ -20,10 +21,11 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  const db = getDatabase(app);
   window.db = db;
-  window.addDoc = addDoc;
-  window.collection = collection;
+  window.ref = ref;
+  window.push = push;
+  window.set = set;
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -351,14 +353,13 @@ function editRecord(index){
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
-// Tombol Submit Utama: Simpan Lokal + Kirim Otomatis ke Cloud Firestore
+// Tombol Submit Utama: Simpan Lokal + Kirim Otomatis ke Cloud Realtime Database
 form.addEventListener('submit', async e=>{
   e.preventDefault();
   const nik=document.getElementById('nik').value.trim();
   if(!/^\d{16}$/.test(nik)){alert('NIK harus terdiri dari 16 digit angka.');return;}
   
   const submitBtn = document.getElementById('submitBtn');
-  const originalText = submitBtn.textContent;
   submitBtn.textContent = 'Menyimpan ke Cloud...';
   submitBtn.disabled = true;
 
@@ -366,9 +367,11 @@ form.addEventListener('submit', async e=>{
   const editIndex = parseInt(document.getElementById('editIndex').value);
 
   try{
-    // Coba kirim ke Cloud Firebase Firestore secara online jika terhubung
-    if(window.db && window.addDoc && window.collection){
-      await window.addDoc(window.collection(window.db, "pelanggan_wifi"), data);
+    // Kirim ke Realtime Database secara online
+    if(window.db && window.ref && window.push && window.set){
+      const dbRef = window.ref(window.db, "pelanggan_wifi");
+      const newRef = window.push(dbRef);
+      await window.set(newRef, data);
     }
   } catch(err) {
     console.log("Gagal kirim ke cloud, data tetap disimpan lokal:", err);
@@ -382,7 +385,7 @@ form.addEventListener('submit', async e=>{
       alert('Data pelanggan berhasil diperbarui!');
     } else {
       records.unshift(data);
-      alert('Data pelanggan berhasil disimpan dan dikirim ke Cloud Firebase!');
+      alert('Data pelanggan berhasil disimpan dan dikirim ke Realtime Database!');
     }
     localStorage.setItem('wifi_customer_records',JSON.stringify(records));
     showRecords();
