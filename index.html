@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Data Pelanggan WiFi NSNET</title>
 
-<!-- Firebase SDK (Version 8 Compatible - Sama seperti absen Abang) -->
+<!-- Firebase SDK (Version 8 Compatible) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -18,7 +18,30 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(
 header{background:linear-gradient(120deg,#0a1b2d,#1a6fc4);color:#fff;padding:32px 28px;border-radius:18px 18px 0 0;box-shadow:0 4px 20px rgba(0,0,0,0.3);text-align:center}
 header h1{margin:0 0 8px;font-size:clamp(24px,4vw,34px);letter-spacing:.5px}
 header p{margin:0;color:#dbeafe;line-height:1.5}
+
+/* Style untuk Menu Surat Perintah Tugas (Dropdown / Toggle) */
+.tujuan-card{background:var(--card-bg);padding:0 26px;border:1px solid var(--line);border-top:0;box-shadow:0 12px 30px rgba(0,0,0,0.4);margin-bottom:0}
+.tujuan-toggle-btn{width:100%;background:linear-gradient(120deg,#183b56,#1e3a5f);color:#fff;padding:16px 20px;border:0;border-radius:0;font-weight:700;font-size:15px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;text-align:left;border-bottom:1px solid var(--line)}
+.tujuan-toggle-btn:hover{background:linear-gradient(120deg,#1e3a5f,#1677ff)}
+.tujuan-content{display:none;padding:22px 0;border-top:1px dashed var(--line)}
+
+.surat-header{text-align:center;margin-bottom:20px;border-bottom:2px dashed var(--line);padding-bottom:15px}
+.surat-header h3{color:#38bdf8;margin:0 0 10px;font-size:18px;text-transform:uppercase;letter-spacing:0.5px}
+
+.pimpinan-info{background:#0b1926;border:1px solid var(--line);border-radius:10px;padding:15px;margin-bottom:20px;display:flex;flex-direction:column;gap:12px;max-width:400px}
+.pimpinan-item label{font-size:11px;color:#9fb3c8;text-transform:uppercase;display:block;margin-bottom:2px}
+.pimpinan-item div{font-size:14px;color:#fff;font-weight:700}
+
+.surat-body{font-size:13px;line-height:1.6;color:#e2e8f0}
+.surat-body p{margin-bottom:12px}
+.surat-body ol,.surat-body ul{margin:8px 0 16px 20px}
+.surat-body li{margin-bottom:6px}
+
+/* Bagian Tanda Tangan Dibuat Center (Tengah) */
+.surat-footer{margin-top:20px;text-align:center;font-size:13px;line-height:1.5;border-top:1px solid var(--line);padding-top:15px}
+
 form,.records{background:var(--card-bg);padding:26px;border:1px solid var(--line);box-shadow:0 12px 30px rgba(0,0,0,0.4)}
+form{border-top:0;border-radius:0 0 18px 18px}
 .section-title{font-size:16px;font-weight:700;color:#fff;margin:4px 0 18px;padding-bottom:10px;border-bottom:1px solid var(--line)}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
 .field{display:flex;flex-direction:column;gap:7px;min-width:0}
@@ -36,7 +59,7 @@ button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:point
 .photo-card label{display:block;margin-bottom:10px}
 .preview{width:100%;height:145px;object-fit:contain;background:#183b56;border-radius:8px;margin-top:10px;display:none}
 .actions{margin-top:24px}
-.records{border-top:0;border-radius:0 0 18px 18px}
+.records{border-top:0;border-radius:0 0 18px 18px;margin-top:20px}
 .record{padding:14px;border:1px solid var(--line);border-radius:10px;margin-top:10px;display:flex;justify-content:space-between;gap:12px;align-items:center;background:#0b1926}
 .record strong{display:block;margin-bottom:5px;color:#fff}.record small{color:#9fb3c8}
 
@@ -56,8 +79,8 @@ button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:point
 .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;border-top:1px solid var(--line);padding-top:16px;flex-wrap:wrap}
 
 footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
-@media(max-width:650px){body{padding:12px}.grid{grid-template-columns:1fr}form,.records{padding:18px}.photos{grid-template-columns:1fr}.photo-card{display:grid;grid-template-columns:1fr}.preview{height:180px}.record{align-items:flex-start;flex-direction:column}.modal-grid{grid-template-columns:1fr}.modal-photos{grid-template-columns:1fr}}
-@media print{body{background:#fff;color:#000;padding:0}header{border-radius:0}form,.records{box-shadow:none;background:#fff;color:#000}.actions,button,.records,.modal-overlay{display:none!important}}
+@media(max-width:650px){body{padding:12px}.grid{grid-template-columns:1fr}form,.records,.tujuan-card{padding:18px}.photos{grid-template-columns:1fr}.photo-card{display:grid;grid-template-columns:1fr}.preview{height:180px}.record{align-items:flex-start;flex-direction:column}.modal-grid{grid-template-columns:1fr}.modal-photos{grid-template-columns:1fr}}
+@media print{body{background:#fff;color:#000;padding:0}header{border-radius:0}.tujuan-card,form,.records{box-shadow:none;background:#fff;color:#000;border:1px solid #ccc}.tujuan-content{display:block!important}.pimpinan-info{background:#f8f9fa;color:#000;border:1px solid #ccc}.pimpinan-item div{color:#000}.actions,button,.records,.modal-overlay{display:none!important}}
 </style>
 </head>
 <body>
@@ -66,19 +89,79 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
   <h1>DATA PELANGGAN NSNET</h1>
   <p>Formulir pendataan pelanggan — isi data dengan benar, lalu simpan data anda</p>
 </header>
-<form id="customerForm">
+
+<!-- MENU TOMBOL TOGGLE TUJUAN PENDATAAN PELANGGAN -->
+<div class="tujuan-card">
+  <button type="button" class="tujuan-toggle-btn" id="toggleTujuanBtn">
+    <span>📂 KLIK DI SINI : TUJUAN PENDATAAN PELANGGAN</span>
+    <span id="toggleIcon">▼ Buka</span>
+  </button>
+  
+  <div class="tujuan-content" id="tujuanContentBox">
+    <div class="surat-header">
+      <h3>📄 Tujuan Pendataan Pelanggan Sebagai Berikut : </h3>
+      <p style="margin:0;font-size:15px;color:#94a3b8;">Semua data pelanggan di jamin 100% aman dari penyalahgunaan</p>
+    </div>
+
+    <div class="pimpinan-info">
+      <div class="pimpinan-item"><label>Nama Pimpinan</label><div>Yopin Bagi, S.Pd</div></div>
+      <div class="pimpinan-item"><label>NIK</label><div>7504092105870001</div></div>
+      <div class="pimpinan-item"><label>Jabatan</label><div>Pimpinan Wifi NSNET (NithaStudio)</div></div>
+    </div>
+
+    <div class="surat-body">
+      <p><b>Dengan hormat,</b></p>
+      <p>Berdasarkan kebutuhan pengelolaan pengembangan serta pembaruan, dan penertiban data pelanggan jaringan WiFi NSNET (NithaStudio), maka saya selaku Pimpinan WiFi NSNET (NithaStudio) melakukan pendataan kepada semua pelanggan sebagai berikut :</p>
+      
+      <p><b>A. TUJUAN TUGAS</b></p>
+      <ol>
+        <li>Mengetahui jumlah pelanggan aktif secara pasti</li>
+        <li>Menginventarisasi seluruh pelanggan aktif</li>
+        <li>Memperbarui data pelanggan yang belum lengkap / berubah</li>
+        <li>Memastikan kesesuaian lokasi pemasangan, identitas, dan layanan yang diterima</li>
+        <li>Menertibkan pelanggan yang datanya belum tercatat</li>
+      </ol>
+
+      <p><b>B. PENDATAAN YG DILAKUKAN</b></p>
+      <ol>
+        <li>Mengumpulkan data identitas pelanggan berupa : Foto KTP, Foto rumah, Foto alat yang terpasang, dan nomor HP/WA</li>
+        <li>Mencatat tikor atau titik koordinat lokasi pemasangan sebagai penerimaan sinyal</li>
+        <li>Mencatat jenis layanan, kecepatan, masa aktif, dan paket yang dipakai</li>
+        <li>Memeriksa kondisi perangkat & kabel, serta kualitas sinyal yang diterima</li>
+        <li>Memperbarui atau melengkapi formulir pendataan pelanggan demi pemenuhan perpanjangan legalitas usaha Wifi Nitha Studio</li>
+      </ol>
+
+      <p><b>C. KEAMANAN DATA PELANGGAN</b></p>
+      <ol>
+        <li>Pengumpulan data ini dijamin 100% aman dan tidak untuk disalah gunakan</li>
+        <li>Data-data yg dikumpulkan sebagai syarat perpanjangan legalitas usaha Wifi Nitha Studio</li>
+        <li>Apabila di kemudian hari data ini disalahgunakan, kami siap bertanggung jawab sesuai hukum yang berlaku</li>
+      </ol>
+
+      <p>Demikian surat pendataan tugas ini dibuat untuk dilaksanakan dengan penuh tanggung jawab. Segala sesuatu yang menjadi pelaksanaan tugas ini agar dilaporkan sebagaimana mestinya.</p>
+    </div>
+
+    <div class="surat-footer">
+      <span>Dikeluarkan di : Marisa, 01 November 2026</span><br>
+      <b>PIMPINAN WIFI NSNET (NITHASTUDIO)</b><br><br><br><br><br>
+      <b style="text-decoration: underline; font-size: 14px;">(YOPIN BAGI, S.PD)</b>
+    </div>
+  </div>
+</div>
+
+<form id="customerForm" autocomplete="off">
   <input type="hidden" id="editKey" value="">
   <div class="section-title">Identitas Pelanggan</div>
   <div class="grid">
-    <div class="field"><label for="nik">NIK</label><input id="nik" name="nik" inputmode="numeric" maxlength="16" placeholder="Masukkan 16 digit NIK" required><span class="hint">Data identitas bersifat pribadi. Simpan file di perangkat yang aman.</span></div>
-    <div class="field"><label for="nama">Nama Pelanggan</label><input id="nama" name="nama" placeholder="Nama lengkap sesuai KTP" required></div>
+    <div class="field"><label for="nik">NIK</label><input id="nik" name="nik" inputmode="numeric" maxlength="16" placeholder="Masukkan 16 digit NIK" autocomplete="off" required><span class="hint">Data identitas bersifat pribadi. Simpan file di perangkat yang aman.</span></div>
+    <div class="field"><label for="nama">Nama Pelanggan</label><input id="nama" name="nama" placeholder="Nama lengkap sesuai KTP" autocomplete="off" required></div>
     <div class="field"><label for="jk">Jenis Kelamin</label><select id="jk" name="jenis_kelamin" required><option value="">-- Pilih jenis kelamin --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
-    <div class="field"><label for="pekerjaan">Pekerjaan</label><input id="pekerjaan" name="pekerjaan" placeholder="Contoh: Wiraswasta"></div>
-    <div class="field full"><label for="alamat">Alamat</label><textarea id="alamat" name="alamat" placeholder="Jalan, dusun/kelurahan, kecamatan, kabupaten" required></textarea></div>
-    <div class="field"><label for="hp">Nomor Handphone / WhatsApp</label><input id="hp" name="nomor_handphone" type="tel" placeholder="Contoh: 08xxxxxxxxxx" required></div>
+    <div class="field"><label for="pekerjaan">Pekerjaan</label><input id="pekerjaan" name="pekerjaan" placeholder="Contoh: Wiraswasta" autocomplete="off"></div>
+    <div class="field full"><label for="alamat">Alamat</label><textarea id="alamat" name="alamat" placeholder="Jalan, dusun/kelurahan, kecamatan, kabupaten" autocomplete="off" required></textarea></div>
+    <div class="field"><label for="hp">Nomor Handphone / WhatsApp</label><input id="hp" name="nomor_handphone" type="tel" placeholder="Contoh: 08xxxxxxxxxx" autocomplete="off" required></div>
     <div class="field"><label for="tanggal">Tanggal Pendataan</label><input id="tanggal" name="tanggal_pendataan" type="date"></div>
-    <div class="field full"><label>Titik Lokasi Rumah Pelanggan</label>
-      <div class="location-row"><input id="lokasi" name="titik_lokasi" placeholder="Koordinat GPS atau tautan Google Maps"><button type="button" class="secondary" id="getLocation">Ambil Lokasi GPS Rumah Anda </button></div>
+    <div class="field full"><label>Titik Lokasi Rumah Anda</label>
+      <div class="location-row"><input id="lokasi" name="titik_lokasi" placeholder="Koordinat GPS atau tautan Google Maps" autocomplete="off"><button type="button" class="secondary" id="getLocation">Ambil Lokasi GPS Rumah Anda </button></div>
       <span class="hint">Izinkan akses lokasi pada browser</span>
     </div>
   </div>
@@ -114,18 +197,23 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
   </div>
   <div class="actions">
     <button class="primary" type="submit" id="submitBtn">SIMPAN DATA</button>
-    <button class="secondary" type="button" id="download">Ekspor JSON</button>
-    <button class="secondary" type="button" id="importJsonBtn">Impor JSON</button>
-    <button class="secondary" type="button" id="exportCsv">Ekspor CSV</button>
+    <button class="secondary" type="button" id="adminDownloadJson">🔒 Ekspor JSON</button>
+    <button class="secondary" type="button" id="adminImportJson">🔒 Impor JSON</button>
+    <button class="secondary" type="button" id="adminExportCsv">🔒 Ekspor CSV</button>
 	<input type="file" id="importJsonFile" accept=".json" style="display:none">
-    <button class="secondary" type="button" onclick="window.print()">Cetak Formulir</button>
+    <button class="secondary" type="button" id="adminPrintForm">🔒 Cetak Formulir</button>
   </div>
-  <p class="hint">Data yang disimpan tersimpan di perangkat ini dan terkirim otomatis ke Realtime Database Firebase</p>
+  <p class="hint">Data yang disimpan tersimpan di perangkat ini dan terkirim otomatis ke Realtime Database</p>
 </form>
 <section class="records">
   <div class="section-title">Data Tersimpan Secara Online (Realtime Database)</div>
-  <div id="recordList"><span class="hint">Memuat data dari server Firebase...</span></div>
-  <div class="actions"><button type="button" class="danger" id="clearAll">Hapus Semua Data Online</button></div>
+  <div id="recordList">
+    <div style="padding:20px;text-align:center;">
+      <p style="color:#9fb3c8;margin-bottom:12px;">🔒 Daftar data pelanggan dikunci demi keamanan privasi.</p>
+      <button type="button" class="primary" id="unlockRecordsBtn">🔓 Masukkan Sandi Admin untuk Membuka Data</button>
+    </div>
+  </div>
+  <div class="actions" style="margin-top:16px;"><button type="button" class="danger" id="clearAll">🔒 Hapus Semua Data Online</button></div>
 </section>
 <footer>Formulir Data Pelanggan WiFi • Simpan data pribadi dengan aman dan batasi akses hanya kepada petugas berwenang.</footer>
 </div>
@@ -176,7 +264,51 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
   </div>
 </div>
 
+<!-- Modal Edit Pelanggan -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-content" style="max-width:800px;">
+    <div class="modal-header">
+      <h3 id="editModalTitle">✏️ Edit Data Pelanggan</h3>
+      <button class="close-modal" id="closeEditModal">×</button>
+    </div>
+    <form id="editFormModal" autocomplete="off">
+      <input type="hidden" id="modalEditKey" value="">
+      <div class="modal-grid" style="gap:12px;margin-bottom:14px;">
+        <div class="field"><label for="m-edit-nik">NIK</label><input id="m-edit-nik" inputmode="numeric" maxlength="16" required></div>
+        <div class="field"><label for="m-edit-nama">Nama Pelanggan</label><input id="m-edit-nama" required></div>
+        <div class="field"><label for="m-edit-jk">Jenis Kelamin</label><select id="m-edit-jk" required><option value="">-- Pilih --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
+        <div class="field"><label for="m-edit-pekerjaan">Pekerjaan</label><input id="m-edit-pekerjaan"></div>
+        <div class="field"><label for="m-edit-hp">Nomor HP / WhatsApp</label><input id="m-edit-hp" type="tel" required></div>
+        <div class="field"><label for="m-edit-tanggal">Tanggal Pendataan</label><input id="m-edit-tanggal" type="date"></div>
+        <div class="field full"><label for="m-edit-lokasi">Titik Koordinat / Maps</label><input id="m-edit-lokasi"></div>
+        <div class="field full"><label for="m-edit-alamat">Alamat Lengkap</label><textarea id="m-edit-alamat" required></textarea></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="secondary" id="m-cancelEditBtn" style="background:#1e3a5f;">Batal</button>
+        <button type="submit" class="primary" id="m-saveEditBtn">💾 Simpan Perubahan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
+    // SANDI KEAMANAN ADMIN (Ubah angka '123' di bawah ini jika ingin mengganti sandi)
+    const ADMIN_PASSWORD = "Terlambat1234";
+    let isAdminUnlocked = false;
+
+    // Script Toggle Tombol Tujuan Pendataan
+    document.getElementById('toggleTujuanBtn').addEventListener('click', function() {
+      const contentBox = document.getElementById('tujuanContentBox');
+      const toggleIcon = document.getElementById('toggleIcon');
+      if (contentBox.style.display === 'block') {
+        contentBox.style.display = 'none';
+        toggleIcon.textContent = '▼ Buka';
+      } else {
+        contentBox.style.display = 'block';
+        toggleIcon.textContent = '▲ Tutup';
+      }
+    });
+
     // Konfigurasi Database Online Firebase (Realtime Database)
     const firebaseConfig = {
       databaseURL: "https://nsnet-data-pelanggan-default-rtdb.firebaseio.com"
@@ -229,26 +361,44 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       },err=>{field.value='';alert('Lokasi tidak dapat diambil. Periksa izin lokasi browser atau isi secara manual.');},{enableHighAccuracy:true,timeout:12000});
     });
 
+    // Tombol Buka Kunci Data Online
+    document.getElementById('unlockRecordsBtn').addEventListener('click', () => {
+      const pass = prompt('🔒 Masukkan Sandi Admin untuk membuka data pelanggan:');
+      if(pass === null) return;
+      if(pass !== ADMIN_PASSWORD) {
+        alert('❌ Sandi salah!');
+        return;
+      }
+      isAdminUnlocked = true;
+      loadRecordsToDOM();
+    });
+
     // Realtime Listener dari Firebase Database (Node: pelanggan_wifi)
     database.ref('pelanggan_wifi').on('value', (snapshot) => {
-      const list = document.getElementById('recordList');
-      list.innerHTML = '';
       const data = snapshot.val();
-
       if (!data) {
         currentPelangganData = [];
+      } else {
+        const keys = Object.keys(data);
+        currentPelangganData = keys.map(key => ({
+          id: key,
+          ...data[key]
+        }));
+        currentPelangganData.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+      }
+      if(isAdminUnlocked) {
+        loadRecordsToDOM();
+      }
+    });
+
+    function loadRecordsToDOM(){
+      const list = document.getElementById('recordList');
+      list.innerHTML = '';
+
+      if (!currentPelangganData.length) {
         list.innerHTML = '<span class="hint">Belum ada data pelanggan tersimpan di server.</span>';
         return;
       }
-
-      const keys = Object.keys(data);
-      currentPelangganData = keys.map(key => ({
-        id: key,
-        ...data[key]
-      }));
-
-      // Urutkan dari yang terbaru
-      currentPelangganData.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
       currentPelangganData.forEach((r) => {
         const div = document.createElement('div');
@@ -272,7 +422,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
         const edit = document.createElement('button');
         edit.className = 'secondary';
         edit.innerHTML = '✏️ Edit';
-        edit.onclick = () => editRecord(r.id);
+        edit.onclick = () => openEditModal(r.id);
 
         const del = document.createElement('button');
         del.className = 'danger';
@@ -283,7 +433,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
         div.append(info, actions);
         list.append(div);
       });
-    });
+    }
 
     function openDetailModal(r){
       document.getElementById('modalTitle').textContent = '📁 Detail Pelanggan: ' + (r.nama || '');
@@ -343,28 +493,69 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
     document.getElementById('m-closeBtn').onclick = closeModalFunc;
     document.getElementById('detailModal').onclick = (e)=>{ if(e.target === document.getElementById('detailModal')) closeModalFunc(); };
 
-    function editRecord(id){
+    // Buka Modal Edit
+    function openEditModal(id){
       const r = currentPelangganData.find(item => item.id === id);
       if(!r) return;
-      document.getElementById('editKey').value = r.id;
-      document.getElementById('nik').value = r.nik || '';
-      document.getElementById('nama').value = r.nama || '';
-      document.getElementById('jk').value = r.jenis_kelamin || '';
-      document.getElementById('pekerjaan').value = r.pekerjaan || '';
-      document.getElementById('alamat').value = r.alamat || '';
-      document.getElementById('hp').value = r.nomor_handphone || '';
-      document.getElementById('tanggal').value = r.tanggal_pendataan || '';
-      document.getElementById('lokasi').value = r.titik_lokasi || '';
-      
-      if(r.foto_ktp) { photoCache.foto_ktp = r.foto_ktp; const img=document.getElementById('prev-ktp'); img.src=r.foto_ktp; img.style.display='block'; const btn=document.getElementById('dl-btn-ktp'); if(btn) btn.style.display='inline-flex'; }
-      if(r.foto_rumah) { photoCache.foto_rumah = r.foto_rumah; const img=document.getElementById('prev-rumah'); img.src=r.foto_rumah; img.style.display='block'; const btn=document.getElementById('dl-btn-rumah'); if(btn) btn.style.display='inline-flex'; }
-      if(r.foto_alat_wifi) { photoCache.foto_alat_wifi = r.foto_alat_wifi; const img=document.getElementById('prev-alat'); img.src=r.foto_alat_wifi; img.style.display='block'; const btn=document.getElementById('dl-btn-alat'); if(btn) btn.style.display='inline-flex'; }
 
-      document.getElementById('submitBtn').textContent = 'Perbarui Data';
-      window.scrollTo({top: 0, behavior: 'smooth'});
+      document.getElementById('modalEditKey').value = r.id;
+      document.getElementById('editModalTitle').textContent = '✏️ Edit Data: ' + (r.nama || '');
+      document.getElementById('m-edit-nik').value = r.nik || '';
+      document.getElementById('m-edit-nama').value = r.nama || '';
+      document.getElementById('m-edit-jk').value = r.jenis_kelamin || '';
+      document.getElementById('m-edit-pekerjaan').value = r.pekerjaan || '';
+      document.getElementById('m-edit-hp').value = r.nomor_handphone || '';
+      document.getElementById('m-edit-tanggal').value = r.tanggal_pendataan || '';
+      document.getElementById('m-edit-lokasi').value = r.titik_lokasi || '';
+      document.getElementById('m-edit-alamat').value = r.alamat || '';
+
+      document.getElementById('editModal').style.display = 'flex';
     }
 
-    // Tombol Submit Utama: Simpan ke Firebase Realtime Database
+    function closeEditModalFunc(){
+      document.getElementById('editModal').style.display = 'none';
+    }
+    document.getElementById('closeEditModal').onclick = closeEditModalFunc;
+    document.getElementById('m-cancelEditBtn').onclick = closeEditModalFunc;
+    document.getElementById('editModal').onclick = (e)=>{ if(e.target === document.getElementById('editModal')) closeEditModalFunc(); };
+
+    // Simpan Perubahan dari Modal Edit
+    document.getElementById('editFormModal').addEventListener('submit', async e=>{
+      e.preventDefault();
+      const nik = document.getElementById('m-edit-nik').value.trim();
+      if(!/^\d{16}$/.test(nik)){alert('NIK harus terdiri dari 16 digit angka.');return;}
+
+      const editKey = document.getElementById('modalEditKey').value;
+      if(!editKey) return;
+
+      const saveBtn = document.getElementById('m-saveEditBtn');
+      saveBtn.textContent = 'Menyimpan...';
+      saveBtn.disabled = true;
+
+      const updatedData = {
+        nik: nik,
+        nama: document.getElementById('m-edit-nama').value.trim(),
+        jenis_kelamin: document.getElementById('m-edit-jk').value,
+        pekerjaan: document.getElementById('m-edit-pekerjaan').value.trim(),
+        nomor_handphone: document.getElementById('m-edit-hp').value.trim(),
+        tanggal_pendataan: document.getElementById('m-edit-tanggal').value,
+        titik_lokasi: document.getElementById('m-edit-lokasi').value.trim(),
+        alamat: document.getElementById('m-edit-alamat').value.trim()
+      };
+
+      try {
+        await database.ref('pelanggan_wifi/' + editKey).update(updatedData);
+        alert('Data pelanggan berhasil diperbarui!');
+        closeEditModalFunc();
+      } catch(err) {
+        alert('Gagal memperbarui data: ' + err.message);
+      } finally {
+        saveBtn.textContent = '💾 Simpan Perubahan';
+        saveBtn.disabled = false;
+      }
+    });
+
+    // Tombol Submit Formulir Utama (Tambah Data Baru)
     form.addEventListener('submit', async e=>{
       e.preventDefault();
       const nik=document.getElementById('nik').value.trim();
@@ -382,17 +573,9 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       if(photoCache.foto_rumah) data.foto_rumah = photoCache.foto_rumah;
       if(photoCache.foto_alat_wifi) data.foto_alat_wifi = photoCache.foto_alat_wifi;
 
-      const editKey = document.getElementById('editKey').value;
-
       try {
-        if(editKey) {
-          await database.ref('pelanggan_wifi/' + editKey).update(data);
-          alert('Data pelanggan berhasil diperbarui!');
-          document.getElementById('editKey').value = '';
-        } else {
-          await database.ref('pelanggan_wifi').push(data);
-          alert('Data pelanggan berhasil disimpan ke Realtime Database!');
-        }
+        await database.ref('pelanggan_wifi').push(data);
+        alert('Data pelanggan berhasil disimpan ke Realtime Database!');
         form.reset();
         photoCache = {};
       } catch(err) {
@@ -403,7 +586,15 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       }
     });
 
+    // Fungsi Hapus Data Satuan dengan Kunci Sandi
     function hapusPelanggan(id, nama){
+      const pass = prompt('🔒 Masukkan Sandi Admin untuk menghapus data pelanggan ini:');
+      if(pass === null) return;
+      if(pass !== ADMIN_PASSWORD) {
+        alert('❌ Sandi salah! Anda tidak memiliki izin untuk menghapus data.');
+        return;
+      }
+
       if(confirm(`Yakin ingin menghapus data ${nama || 'ini'} dari server online?`)){
         database.ref('pelanggan_wifi/' + id).remove()
           .then(() => alert('Data berhasil dihapus!'))
@@ -411,14 +602,24 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       }
     }
 
-    document.getElementById('download').addEventListener('click',()=>{
+    // Tombol Admin Terkunci: Ekspor JSON
+    document.getElementById('adminDownloadJson').addEventListener('click',()=>{
+      const pass = prompt('🔒 Masukkan Sandi Admin untuk mengekspor data JSON:');
+      if(pass === null) return;
+      if(pass !== ADMIN_PASSWORD) { alert('❌ Sandi salah!'); return; }
+
       if(!currentPelangganData.length){alert('Belum ada data tersimpan untuk diekspor.');return;}
       const blob=new Blob([JSON.stringify(currentPelangganData,null,2)],{type:'application/json'});
       const url=URL.createObjectURL(blob),a=document.createElement('a');
       a.href=url;a.download='semua-data-pelanggan-wifi.json';a.click();URL.revokeObjectURL(url);
     });
 
-    document.getElementById('exportCsv').addEventListener('click',()=>{
+    // Tombol Admin Terkunci: Ekspor CSV
+    document.getElementById('adminExportCsv').addEventListener('click',()=>{
+      const pass = prompt('🔒 Masukkan Sandi Admin untuk mengekspor data CSV:');
+      if(pass === null) return;
+      if(pass !== ADMIN_PASSWORD) { alert('❌ Sandi salah!'); return; }
+
       if(!currentPelangganData.length){alert('Belum ada data tersimpan untuk diekspor ke CSV.');return;}
       const keys = ['nik','nama','jenis_kelamin','pekerjaan','alamat','nomor_handphone','tanggal_pendataan','titik_lokasi','dibuat_pada'];
       let csv = keys.join(',') + '\n';
@@ -430,7 +631,14 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       a.href=url;a.download='data-pelanggan-wifi.csv';a.click();URL.revokeObjectURL(url);
     });
 
-    document.getElementById('importJsonBtn').addEventListener('click',()=>document.getElementById('importJsonFile').click());
+    // Tombol Admin Terkunci: Impor JSON
+    document.getElementById('adminImportJson').addEventListener('click',()=>{
+      const pass = prompt('🔒 Masukkan Sandi Admin untuk mengimpor file JSON:');
+      if(pass === null) return;
+      if(pass !== ADMIN_PASSWORD) { alert('❌ Sandi salah!'); return; }
+      document.getElementById('importJsonFile').click();
+    });
+
     document.getElementById('importJsonFile').addEventListener('change',(e)=>{
       const file = e.target.files[0];
       if(!file) return;
@@ -449,14 +657,30 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
           }
           alert('Data berhasil diimpor ke Realtime Database!');
         } catch(err){
-          alert('Gagal membaca file JSON. Pastikan format file benar.');
+          alert('Gagal membaca file JSON. Pastikan file benar.');
         }
       };
       reader.readAsText(file);
       e.target.value = '';
     });
 
+    // Tombol Admin Terkunci: Cetak Formulir
+    document.getElementById('adminPrintForm').addEventListener('click',()=>{
+      const pass = prompt('🔒 Masukkan Sandi Admin untuk mencetak formulir:');
+      if(pass === null) return;
+      if(pass !== ADMIN_PASSWORD) { alert('❌ Sandi salah!'); return; }
+      window.print();
+    });
+
+    // Fungsi Hapus Semua Data Online dengan Kunci Sandi
     document.getElementById('clearAll').addEventListener('click',()=>{
+      const pass = prompt('🔒 Masukkan Sandi Admin untuk menghapus SEMUA data online:');
+      if(pass === null) return;
+      if(pass !== ADMIN_PASSWORD) {
+        alert('❌ Sandi salah! Tindakan dibatalkan.');
+        return;
+      }
+
       if(confirm('Yakin ingin menghapus SEMUA data pelanggan di server online? Tindakan ini tidak dapat dibatalkan.')){
         database.ref('pelanggan_wifi').remove()
           .then(() => alert('Semua data berhasil dibersihkan!'))
