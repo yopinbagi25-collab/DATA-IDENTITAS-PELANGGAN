@@ -4,7 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Data Pelanggan WiFi NSNET</title>
-<!-- Include html2canvas library if needed -->
+<!-- Firebase App SDK (Modular v10) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // KONFIGURASI FIREBASE PROJECT: nsnet-data-pelanggan
+  const firebaseConfig = {
+    apiKey: "GANTI_DENGAN_API_KEY_ANDA",
+    authDomain: "nsnet-data-pelanggan.firebaseapp.com",
+    projectId: "nsnet-data-pelanggan",
+    storageBucket: "nsnet-data-pelanggan.appspot.com",
+    messagingSenderId: "GANTI_DENGAN_SENDER_ID",
+    appId: "GANTI_DENGAN_APP_ID"
+  };
+
+  // Inisialisasi Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  window.db = db; // Global agar bisa diakses form
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root{--navy:#0b1926;--card-bg:#102a43;--blue:#1677ff;--light:#183b56;--line:#1e3a5f;--text:#e2e8f0}
@@ -109,19 +129,19 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
     </div>
   </div>
   <div class="actions">
-    <button class="primary" type="submit" id="submitBtn">SIMPAN DATA</button>
+    <button class="primary" type="submit" id="submitBtn">SIMPAN KE CLOUD</button>
     <button class="secondary" type="button" id="download">Ekspor JSON</button>
     <button class="secondary" type="button" id="importJsonBtn">Impor JSON</button>
     <button class="secondary" type="button" id="exportCsv">Ekspor CSV</button>
 	<input type="file" id="importJsonFile" accept=".json" style="display:none">
     <button class="secondary" type="button" onclick="window.print()">Cetak Formulir</button>
   </div>
-  <p class="hint">Data yang disimpan pada halaman ini tersimpan di penyimpanan browser perangkat ini</p>
+  <p class="hint">Data yang disimpan akan terkirim langsung ke Cloud Database Firebase secara real-time</p>
 </form>
 <section class="records">
-  <div class="section-title">Data Tersimpan di Perangkat Ini</div>
-  <div id="recordList"><span class="hint">Belum ada data yang disimpan.</span></div>
-  <div class="actions"><button type="button" class="danger" id="clearAll">Hapus Semua Data Tersimpan</button></div>
+  <div class="section-title">Data Tersimpan (Offline / Cache Perangkat)</div>
+  <div id="recordList"><span class="hint">Belum ada data di perangkat ini.</span></div>
+  <div class="actions"><button type="button" class="danger" id="clearAll">Hapus Semua Data Cache</button></div>
 </section>
 <footer>Formulir Data Pelanggan WiFi • Simpan data pribadi dengan aman dan batasi akses hanya kepada petugas berwenang.</footer>
 </div>
@@ -134,281 +154,4 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       <button class="close-modal" id="closeModal">×</button>
     </div>
     <div class="modal-grid">
-      <div class="modal-item"><label>NIK</label><div id="m-nik">-</div></div>
-      <div class="modal-item"><label>Nama Pelanggan</label><div id="m-nama">-</div></div>
-      <div class="modal-item"><label>Jenis Kelamin</label><div id="m-jk">-</div></div>
-      <div class="modal-item"><label>Pekerjaan</label><div id="m-pekerjaan">-</div></div>
-      <div class="modal-item"><label>Nomor HP / WhatsApp</label><div id="m-hp" style="color:#60a5fa">-</div></div>
-      <div class="modal-item"><label>Tanggal Pendataan</label><div id="m-tanggal">-</div></div>
-      <div class="modal-item full" style="grid-column:1/-1"><label>Titik Koordinat / Maps</label><div id="m-lokasi">-</div></div>
-      <div class="modal-item full" style="grid-column:1/-1"><label>Alamat Lengkap</label><div id="m-alamat">-</div></div>
-    </div>
-    
-    <div style="font-size:13px;font-weight:700;color:#9fb3c8;margin-bottom:8px;text-transform:uppercase;">Dokumen Lampiran Foto</div>
-    <div class="modal-photos">
-      <div class="modal-photo-box">
-        <span>Foto KTP</span>
-        <img id="m-foto-ktp" src="" alt="Belum ada foto" style="display:none">
-        <div id="m-foto-ktp-empty" style="font-size:11px;color:#94a3b8;padding:30px 0;">Tidak ada foto</div>
-        <button type="button" class="secondary" id="m-dl-ktp" style="display:none;width:100%;font-size:11px;padding:6px;margin-top:8px;justify-content:center;">📥 Unduh</button>
-      </div>
-      <div class="modal-photo-box">
-        <span>Foto Rumah</span>
-        <img id="m-foto-rumah" src="" alt="Belum ada foto" style="display:none">
-        <div id="m-foto-rumah-empty" style="font-size:11px;color:#94a3b8;padding:30px 0;">Tidak ada foto</div>
-        <button type="button" class="secondary" id="m-dl-rumah" style="display:none;width:100%;font-size:11px;padding:6px;margin-top:8px;justify-content:center;">📥 Unduh</button>
-      </div>
-      <div class="modal-photo-box">
-        <span>Foto Alat WiFi</span>
-        <img id="m-foto-alat" src="" alt="Belum ada foto" style="display:none">
-        <div id="m-foto-alat-empty" style="font-size:11px;color:#94a3b8;padding:30px 0;">Tidak ada foto</div>
-        <button type="button" class="secondary" id="m-dl-alat" style="display:none;width:100%;font-size:11px;padding:6px;margin-top:8px;justify-content:center;">📥 Unduh</button>
-      </div>
-    </div>
-
-    <!-- Tombol di bagian bawah modal hanya menyisakan tombol Tutup -->
-    <div class="modal-actions">
-      <button type="button" class="secondary" id="m-closeBtn" style="background:#1e3a5f;">Tutup</button>
-    </div>
-  </div>
-</div>
-
-<script>
-const form=document.getElementById('customerForm');
-let photoCache = {};
-
-const photoInputs=[...document.querySelectorAll('input[type="file"][data-photo]')];
-photoInputs.forEach(input=>input.addEventListener('change',()=>{
-  const img=document.getElementById('prev-'+input.id);
-  const dlBtn=document.getElementById('dl-btn-'+input.id);
-  const file=input.files && input.files[0];
-  if(file){
-    const url = URL.createObjectURL(file);
-    img.src=url;
-    img.style.display='block';
-    if(dlBtn) dlBtn.style.display='inline-flex';
-    photoCache[input.dataset.photo] = url;
-  }else{
-    img.removeAttribute('src');
-    img.style.display='none';
-    if(dlBtn) dlBtn.style.display='none';
-  }
-}));
-
-function downloadSinglePhoto(photoKey, typeName){
-  const url = photoCache[photoKey];
-  if(!url){alert('Tidak ada foto untuk diunduh.');return;}
-  const a = document.createElement('a');
-  a.href = url;
-  const nikVal = document.getElementById('nik').value.trim() || 'pelanggan';
-  a.download = `foto-${typeName}-${nikVal}.jpg`;
-  a.click();
-}
-
-document.getElementById('getLocation').addEventListener('click',()=>{
-  const field=document.getElementById('lokasi');
-  if(!navigator.geolocation){alert('Browser ini tidak mendukung GPS. Silakan masukkan lokasi secara manual.');return;}
-  field.value='Mengambil lokasi...';
-  navigator.geolocation.getCurrentPosition(pos=>{
-    field.value=pos.coords.latitude.toFixed(6)+', '+pos.coords.longitude.toFixed(6);
-  },err=>{field.value='';alert('Lokasi tidak dapat diambil. Periksa izin lokasi browser atau isi secara manual.');},{enableHighAccuracy:true,timeout:12000});
-});
-
-function getRecords(){try{return JSON.parse(localStorage.getItem('wifi_customer_records')||'[]')}catch(e){return []}}
-
-function showRecords(){
-  const list=document.getElementById('recordList'), records=getRecords();
-  if(!records.length){list.innerHTML='<span class="hint">Belum ada data yang disimpan.</span>';return;}
-  list.innerHTML='';
-  records.forEach((r,i)=>{
-    const div=document.createElement('div');div.className='record';
-    const info=document.createElement('div');
-    const strong=document.createElement('strong');strong.textContent=r.nama||'(Tanpa nama)';
-    const small=document.createElement('small');small.textContent='NIK: '+(r.nik||'-')+' • HP: '+(r.nomor_handphone||'-')+' • '+(r.tanggal_pendataan||'Tanggal tidak diisi');
-    info.append(strong,small);
-    
-    const actions=document.createElement('div');
-    actions.style.display = 'flex';
-    actions.style.gap = '6px';
-
-    const view=document.createElement('button');view.className='secondary';view.innerHTML='👁️ Lihat';view.onclick=()=>openDetailModal(r);
-    const edit=document.createElement('button');edit.className='secondary';edit.innerHTML='✏️ Edit';edit.onclick=()=>editRecord(i);
-    const del=document.createElement('button');del.className='danger';del.innerHTML='🗑️ Hapus';del.onclick=()=>{if(confirm('Hapus data '+(r.nama||'ini')+'?')){const arr=getRecords();arr.splice(i,1);localStorage.setItem('wifi_customer_records',JSON.stringify(arr));showRecords();}};
-    
-    actions.append(view,edit,del);
-    div.append(info,actions);
-    list.append(div);
-  });
-}
-
-function openDetailModal(r){
-  document.getElementById('modalTitle').textContent = '📁 Detail Pelanggan: ' + (r.nama || '');
-  document.getElementById('m-nik').textContent = r.nik || '-';
-  document.getElementById('m-nama').textContent = r.nama || '-';
-  document.getElementById('m-jk').textContent = r.jenis_kelamin || '-';
-  document.getElementById('m-pekerjaan').textContent = r.pekerjaan || '-';
-  document.getElementById('m-hp').textContent = r.nomor_handphone || '-';
-  document.getElementById('m-tanggal').textContent = r.tanggal_pendataan || '-';
-  document.getElementById('m-lokasi').textContent = r.titik_lokasi || '-';
-  document.getElementById('m-alamat').textContent = r.alamat || '-';
-
-  const ktpImg = document.getElementById('m-foto-ktp');
-  const ktpEmpty = document.getElementById('m-foto-ktp-empty');
-  const ktpDl = document.getElementById('m-dl-ktp');
-  if(r.foto_ktp){ 
-    ktpImg.src = r.foto_ktp; ktpImg.style.display='block'; ktpEmpty.style.display='none'; ktpDl.style.display='inline-flex';
-    ktpDl.onclick = () => { triggerDownload(r.foto_ktp, 'foto-ktp-' + (r.nik || 'wifi')); };
-  } else { 
-    ktpImg.style.display='none'; ktpEmpty.style.display='block'; ktpDl.style.display='none'; 
-  }
-
-  const rumahImg = document.getElementById('m-foto-rumah');
-  const rumahEmpty = document.getElementById('m-foto-rumah-empty');
-  const rumahDl = document.getElementById('m-dl-rumah');
-  if(r.foto_rumah){ 
-    rumahImg.src = r.foto_rumah; rumahImg.style.display='block'; rumahEmpty.style.display='none'; rumahDl.style.display='inline-flex';
-    rumahDl.onclick = () => { triggerDownload(r.foto_rumah, 'foto-rumah-' + (r.nik || 'wifi')); };
-  } else { 
-    rumahImg.style.display='none'; rumahEmpty.style.display='block'; rumahDl.style.display='none'; 
-  }
-
-  const alatImg = document.getElementById('m-foto-alat');
-  const alatEmpty = document.getElementById('m-foto-alat-empty');
-  const alatDl = document.getElementById('m-dl-alat');
-  if(r.foto_alat_wifi){ 
-    alatImg.src = r.foto_alat_wifi; alatImg.style.display='block'; alatEmpty.style.display='none'; alatDl.style.display='inline-flex';
-    alatDl.onclick = () => { triggerDownload(r.foto_alat_wifi, 'foto-alat-' + (r.nik || 'wifi')); };
-  } else { 
-    alatImg.style.display='none'; alatEmpty.style.display='block'; alatDl.style.display='none'; 
-  }
-
-  document.getElementById('detailModal').style.display = 'flex';
-}
-
-function triggerDownload(dataUrl, filename){
-  const a = document.createElement('a');
-  a.href = dataUrl;
-  a.download = filename + '.jpg';
-  a.click();
-}
-
-function closeModalFunc(){
-  document.getElementById('detailModal').style.display = 'none';
-}
-document.getElementById('closeModal').onclick = closeModalFunc;
-document.getElementById('m-closeBtn').onclick = closeModalFunc;
-document.getElementById('detailModal').onclick = (e)=>{ if(e.target === document.getElementById('detailModal')) closeModalFunc(); };
-
-function readForm(){
-  const data={};
-  new FormData(form).forEach((v,k)=>{if(typeof v==='string')data[k]=v.trim()});
-  data.dibuat_pada=new Date().toISOString();
-  if(photoCache.foto_ktp) data.foto_ktp = photoCache.foto_ktp;
-  if(photoCache.foto_rumah) data.foto_rumah = photoCache.foto_rumah;
-  if(photoCache.foto_alat_wifi) data.foto_alat_wifi = photoCache.foto_alat_wifi;
-  return data;
-}
-
-function editRecord(index){
-  const records = getRecords();
-  const r = records[index];
-  if(!r) return;
-  document.getElementById('editIndex').value = index;
-  document.getElementById('nik').value = r.nik || '';
-  document.getElementById('nama').value = r.nama || '';
-  document.getElementById('jk').value = r.jenis_kelamin || '';
-  document.getElementById('pekerjaan').value = r.pekerjaan || '';
-  document.getElementById('alamat').value = r.alamat || '';
-  document.getElementById('hp').value = r.nomor_handphone || '';
-  document.getElementById('tanggal').value = r.tanggal_pendataan || '';
-  document.getElementById('lokasi').value = r.titik_lokasi || '';
-  
-  if(r.foto_ktp) { photoCache.foto_ktp = r.foto_ktp; const img=document.getElementById('prev-ktp'); img.src=r.foto_ktp; img.style.display='block'; const btn=document.getElementById('dl-btn-ktp'); if(btn) btn.style.display='inline-flex'; }
-  if(r.foto_rumah) { photoCache.foto_rumah = r.foto_rumah; const img=document.getElementById('prev-rumah'); img.src=r.foto_rumah; img.style.display='block'; const btn=document.getElementById('dl-btn-rumah'); if(btn) btn.style.display='inline-flex'; }
-  if(r.foto_alat_wifi) { photoCache.foto_alat_wifi = r.foto_alat_wifi; const img=document.getElementById('prev-alat'); img.src=r.foto_alat_wifi; img.style.display='block'; const btn=document.getElementById('dl-btn-alat'); if(btn) btn.style.display='inline-flex'; }
-
-  document.getElementById('submitBtn').textContent = 'Perbarui Data';
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
-
-form.addEventListener('submit',e=>{
-  e.preventDefault();
-  const nik=document.getElementById('nik').value.trim();
-  if(!/^\d{16}$/.test(nik)){alert('NIK harus terdiri dari 16 digit angka.');return;}
-  const data=readForm();
-  const editIndex = parseInt(document.getElementById('editIndex').value);
-  try{
-    const records=getRecords();
-    if(editIndex >= 0){
-      records[editIndex] = data;
-      document.getElementById('editIndex').value = -1;
-      document.getElementById('submitBtn').textContent = 'Simpan Data';
-      alert('Data pelanggan berhasil diperbarui!');
-    } else {
-      records.unshift(data);
-      alert('Data pelanggan berhasil disimpan di browser perangkat ini.');
-    }
-    localStorage.setItem('wifi_customer_records',JSON.stringify(records));
-    showRecords();
-    form.reset();
-    photoCache = {};
-  }
-  catch(err){alert('Penyimpanan browser penuh atau tidak tersedia.');}
-});
-
-document.getElementById('download').addEventListener('click',()=>{
-  const records = getRecords();
-  if(!records.length){alert('Belum ada data tersimpan untuk diekspor.');return;}
-  const blob=new Blob([JSON.stringify(records,null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob),a=document.createElement('a');
-  a.href=url;a.download='semua-data-pelanggan-wifi.json';a.click();URL.revokeObjectURL(url);
-});
-
-document.getElementById('exportCsv').addEventListener('click',()=>{
-  const records = getRecords();
-  if(!records.length){alert('Belum ada data tersimpan untuk diekspor ke CSV.');return;}
-  const keys = ['nik','nama','jenis_kelamin','pekerjaan','alamat','nomor_handphone','tanggal_pendataan','titik_lokasi','dibuat_pada'];
-  let csv = keys.join(',') + '\n';
-  records.forEach(r=>{
-    csv += keys.map(k => `"${(r[k]||'').replace(/"/g, '""')}"`).join(',') + '\n';
-  });
-  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob),a=document.createElement('a');
-  a.href=url;a.download='data-pelanggan-wifi.csv';a.click();URL.revokeObjectURL(url);
-});
-
-document.getElementById('importJsonBtn').addEventListener('click',()=>document.getElementById('importJsonFile').click());
-document.getElementById('importJsonFile').addEventListener('change',(e)=>{
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(evt){
-    try{
-      const imported = JSON.parse(evt.target.result);
-      const records = getRecords();
-      if(Array.isArray(imported)){
-        localStorage.setItem('wifi_customer_records', JSON.stringify([...imported, ...records]));
-      } else if(typeof imported === 'object' && imported.nik){
-        records.unshift(imported);
-        localStorage.setItem('wifi_customer_records', JSON.stringify(records));
-      }
-      showRecords();
-      alert('Data berhasil diimpor!');
-    } catch(err){
-      alert('Gagal membaca file JSON. Pastikan format file benar.');
-    }
-  };
-  reader.readAsText(file);
-  e.target.value = '';
-});
-
-document.getElementById('clearAll').addEventListener('click',()=>{
-  if(confirm('Yakin ingin menghapus SEMUA data pelanggan yang tersimpan di browser ini? Tindakan ini tidak dapat dibatalkan.')){localStorage.removeItem('wifi_customer_records');showRecords();}
-});
-
-form.addEventListener('reset',()=>{setTimeout(()=>{photoInputs.forEach(input=>{const img=document.getElementById('prev-'+input.id);img.removeAttribute('src');img.style.display='none';const dlBtn=document.getElementById('dl-btn-'+input.id);if(dlBtn)dlBtn.style.display='none';});document.getElementById('editIndex').value='-1';document.getElementById('submitBtn').textContent='Simpan Data';photoCache={};},0)});
-
-showRecords();
-</script>
-</body>
-</html>
+      <div class="modal-item"><label>NIK</label><div id="m-
