@@ -9,16 +9,17 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-  // KONFIGURASI FIREBASE PROJECT: nsnet-data-pelanggan
-  const firebaseConfig = {
-    apiKey: "GANTI_DENGAN_API_KEY_ANDA",
-    authDomain: "nsnet-data-pelanggan.firebaseapp.com",
-    databaseURL: "https://nsnet-data-pelanggan-default-rtdb.firebaseio.com/",
-    projectId: "nsnet-data-pelanggan",
-    storageBucket: "nsnet-data-pelanggan.appspot.com",
-    messagingSenderId: "GANTI_DENGAN_SENDER_ID",
-    appId: "GANTI_DENGAN_APP_ID"
-  };
+ // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDX8EqOFfOXYNteS29L66j_V9cG4n7rnvQ",
+  authDomain: "nsnet-data-pelanggan.firebaseapp.com",
+  databaseURL: "https://nsnet-data-pelanggan-default-rtdb.firebaseio.com",
+  projectId: "nsnet-data-pelanggan",
+  storageBucket: "nsnet-data-pelanggan.firebasestorage.app",
+  messagingSenderId: "439264400649",
+  appId: "1:439264400649:web:7fba243cdbb5dcb734afd8",
+  measurementId: "G-Q1T8R9XWSJ"
+};
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
