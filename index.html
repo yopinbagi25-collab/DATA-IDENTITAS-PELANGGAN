@@ -169,30 +169,31 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
   <div class="photos">
     <div class="photo-card">
       <label for="ktp">FOTO KTP</label>
-      <input id="ktp" type="file" accept="image/*" data-photo="foto_ktp">
+      <!-- Menggunakan accept="image/*" dan capture="environment" agar HP otomatis memunculkan pilihan Kamera atau Galeri -->
+      <input id="ktp" type="file" accept="image/*" capture="environment" data-photo="foto_ktp">
       <img class="preview" id="prev-ktp" alt="Pratinjau foto KTP">
       <div style="margin-top:8px;">
         <button type="button" class="secondary" id="dl-btn-ktp" style="display:none;width:100%;font-size:12px;padding:8px;justify-content:center;" onclick="downloadSinglePhoto('foto_ktp', 'ktp')">📥 Unduh Foto KTP</button>
       </div>
-      <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur</span>
+      <span class="hint" style="margin-top:6px;">Bisa langsung foto kamera atau pilih dari galeri HP</span>
     </div>
     <div class="photo-card">
       <label for="rumah">FOTO DEPAN RUMAH</label>
-      <input id="rumah" type="file" accept="image/*" data-photo="foto_rumah">
+      <input id="rumah" type="file" accept="image/*" capture="environment" data-photo="foto_rumah">
       <img class="preview" id="prev-rumah" alt="Pratinjau foto rumah">
       <div style="margin-top:8px;">
         <button type="button" class="secondary" id="dl-btn-rumah" style="display:none;width:100%;font-size:12px;padding:8px;justify-content:center;" onclick="downloadSinglePhoto('foto_rumah', 'rumah')">📥 Unduh Foto Rumah</button>
       </div>
-      <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur</span>
+      <span class="hint" style="margin-top:6px;">Bisa langsung foto kamera atau pilih dari galeri HP</span>
     </div>
     <div class="photo-card">
       <label for="alat">FOTO ALAT WIFI YANG TERPASANG</label>
-      <input id="alat" type="file" accept="image/*" data-photo="foto_alat_wifi">
+      <input id="alat" type="file" accept="image/*" capture="environment" data-photo="foto_alat_wifi">
       <img class="preview" id="prev-alat" alt="Pratinjau alat WiFi">
       <div style="margin-top:8px;">
         <button type="button" class="secondary" id="dl-btn-alat" style="display:none;width:100%;font-size:12px;padding:8px;justify-content:center;" onclick="downloadSinglePhoto('foto_alat_wifi', 'alat')">📥 Unduh Foto Alat WiFi</button>
       </div>
-      <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur</span>
+      <span class="hint" style="margin-top:6px;">Bisa langsung foto kamera atau pilih dari galeri HP</span>
     </div>
   </div>
   <div class="actions">
