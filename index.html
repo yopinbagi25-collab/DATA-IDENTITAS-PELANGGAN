@@ -201,11 +201,11 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
   </div>
   <div class="actions">
     <button class="primary" type="submit" id="submitBtn">SIMPAN DATA</button>
-    <button class="secondary" type="button" id="adminDownloadJson">🔒 EKSPOR JSON</button>
-    <button class="secondary" type="button" id="adminImportJson">🔒 IMPOR JSON</button>
-    <button class="secondary" type="button" id="adminExportCsv">🔒 EKSPOR CSV</button>
+    <button class="secondary" type="button" id="adminDownloadJson">EKSPOR JSON</button>
+    <button class="secondary" type="button" id="adminImportJson">IMPOR JSON</button>
+    <button class="secondary" type="button" id="adminExportCsv">EKSPOR CSV</button>
 	<input type="file" id="importJsonFile" accept=".json" style="display:none">
-    <button class="secondary" type="button" id="adminPrintForm">🔒 CETAK FORMULIR</button>
+    <button class="secondary" type="button" id="adminPrintForm">CETAK FORMULIR</button>
   </div>
   <p class="hint">Data yang disimpan tersimpan di perangkat ini dan terkirim otomatis ke Realtime Database</p>
 </form>
@@ -213,11 +213,11 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
   <div class="section-title">DATA TERSIMPAN SECARA ONLINE</div>
   <div id="recordList">
     <div style="padding:20px;text-align:center;">
-      <p style="color:#9fb3c8;margin-bottom:12px;">🔒 Daftar data pelanggan dikunci demi keamanan privasi.</p>
-      <button type="button" class="primary" id="unlockRecordsBtn">🔓 Masukkan Sandi Admin untuk Membuka Data</button>
+      <p style="color:#9fb3c8;margin-bottom:12px;">Daftar data pelanggan dilindungi untuk keamanan privasi.</p>
+      <button type="button" class="primary" id="unlockRecordsBtn">Buka Data Pelanggan</button>
     </div>
   </div>
-  <div class="actions" style="margin-top:16px;"><button type="button" class="danger" id="clearAll">🔒 Hapus Semua Data Online</button></div>
+  <div class="actions" style="margin-top:16px;"><button type="button" class="danger" id="clearAll">Hapus Semua Data Online</button></div>
 </section>
 <footer>Formulir Data Pelanggan WiFi • Simpan data pribadi dengan aman dan batasi akses hanya kepada petugas yang berwenang.</footer>
 </div>
@@ -296,7 +296,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
 </div>
 
 <script>
-    // SANDI KEAMANAN ADMIN (Ubah angka '123' di bawah ini jika ingin mengganti sandi)
+    // SANDI KEAMANAN ADMIN (Ubah sandi di bawah ini jika ingin menggantinya)
     const ADMIN_PASSWORD = "Terlambat1234";
     let isAdminUnlocked = false;
 
@@ -325,7 +325,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
     const form = document.getElementById('customerForm');
     let photoCache = {};
 
-    // Fungsi Kompresi Foto
+    // Fungsi Kompresi Foto agar Proses Simpan Cepat
     function compressImage(file, callback) {
       const reader = new FileReader();
       reader.onload = function(e) {
@@ -400,12 +400,12 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       },err=>{field.value='';alert('Lokasi tidak dapat diambil. Periksa izin lokasi browser atau isi secara manual.');},{enableHighAccuracy:true,timeout:12000});
     });
 
-    // Tombol Buka Kunci Data Online
+    // Tombol Buka Kunci Data Online (Dilindungi Sandi Admin)
     document.getElementById('unlockRecordsBtn').addEventListener('click', () => {
-      const pass = prompt('🔒 Masukkan Sandi Admin untuk membuka data pelanggan:');
+      const pass = prompt('Masukkan Sandi Admin untuk membuka data pelanggan:');
       if(pass === null) return;
       if(pass !== ADMIN_PASSWORD) {
-        alert('❌ Sandi salah!');
+        alert('Sandi salah!');
         return;
       }
       isAdminUnlocked = true;
@@ -594,7 +594,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       }
     });
 
-    // Tombol Submit Formulir Utama (Tambah Data Baru)
+    // Tombol Submit Formulir Utama (Tambah Data Baru - Terbuka untuk umum mengisi data)
     form.addEventListener('submit', async e=>{
       e.preventDefault();
       const nik=document.getElementById('nik').value.trim();
@@ -625,12 +625,12 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       }
     });
 
-    // Fungsi Hapus Data Satuan dengan Kunci Sandi
+    // Fungsi Hapus Data Satuan dengan Sandi Admin
     function hapusPelanggan(id, nama){
-      const pass = prompt('🔒 Masukkan Sandi Admin untuk menghapus data pelanggan ini:');
+      const pass = prompt('Masukkan Sandi Admin untuk menghapus data pelanggan ini:');
       if(pass === null) return;
       if(pass !== ADMIN_PASSWORD) {
-        alert('❌ Sandi salah! Anda tidak memiliki izin untuk menghapus data.');
+        alert('Sandi salah! Anda tidak memiliki izin untuk menghapus data.');
         return;
       }
 
@@ -641,11 +641,11 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       }
     }
 
-    // Tombol Admin Terkunci: Ekspor JSON
+    // Tombol Ekspor JSON (Dilindungi Sandi)
     document.getElementById('adminDownloadJson').addEventListener('click',()=>{
-      const pass = prompt('🔒 Masukkan Sandi Admin untuk mengekspor data JSON:');
+      const pass = prompt('Masukkan Sandi Admin untuk mengekspor data JSON:');
       if(pass === null) return;
-      if(pass !== ADMIN_PASSWORD) { alert('❌ Sandi salah!'); return; }
+      if(pass !== ADMIN_PASSWORD) { alert('Sandi salah!'); return; }
 
       if(!currentPelangganData.length){alert('Belum ada data tersimpan untuk diekspor.');return;}
       const blob=new Blob([JSON.stringify(currentPelangganData,null,2)],{type:'application/json'});
@@ -653,11 +653,11 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       a.href=url;a.download='semua-data-pelanggan-wifi.json';a.click();URL.revokeObjectURL(url);
     });
 
-    // Tombol Admin Terkunci: Ekspor CSV
+    // Tombol Ekspor CSV (Dilindungi Sandi)
     document.getElementById('adminExportCsv').addEventListener('click',()=>{
-      const pass = prompt('🔒 Masukkan Sandi Admin untuk mengekspor data CSV:');
+      const pass = prompt('Masukkan Sandi Admin untuk mengekspor data CSV:');
       if(pass === null) return;
-      if(pass !== ADMIN_PASSWORD) { alert('❌ Sandi salah!'); return; }
+      if(pass !== ADMIN_PASSWORD) { alert('Sandi salah!'); return; }
 
       if(!currentPelangganData.length){alert('Belum ada data tersimpan untuk diekspor ke CSV.');return;}
       const keys = ['nik','nama','jenis_kelamin','pekerjaan','alamat','nomor_handphone','tanggal_pendataan','titik_lokasi','dibuat_pada'];
@@ -670,11 +670,11 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       a.href=url;a.download='data-pelanggan-wifi.csv';a.click();URL.revokeObjectURL(url);
     });
 
-    // Tombol Admin Terkunci: Impor JSON
+    // Tombol Impor JSON (Dilindungi Sandi)
     document.getElementById('adminImportJson').addEventListener('click',()=>{
-      const pass = prompt('🔒 Masukkan Sandi Admin untuk mengimpor file JSON:');
+      const pass = prompt('Masukkan Sandi Admin untuk mengimpor file JSON:');
       if(pass === null) return;
-      if(pass !== ADMIN_PASSWORD) { alert('❌ Sandi salah!'); return; }
+      if(pass !== ADMIN_PASSWORD) { alert('Sandi salah!'); return; }
       document.getElementById('importJsonFile').click();
     });
 
@@ -703,20 +703,20 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       e.target.value = '';
     });
 
-    // Tombol Admin Terkunci: Cetak Formulir
+    // Tombol Cetak Formulir (Dilindungi Sandi)
     document.getElementById('adminPrintForm').addEventListener('click',()=>{
-      const pass = prompt('🔒 Masukkan Sandi Admin untuk mencetak formulir:');
+      const pass = prompt('Masukkan Sandi Admin untuk mencetak formulir:');
       if(pass === null) return;
-      if(pass !== ADMIN_PASSWORD) { alert('❌ Sandi salah!'); return; }
+      if(pass !== ADMIN_PASSWORD) { alert('Sandi salah!'); return; }
       window.print();
     });
 
-    // Fungsi Hapus Semua Data Online dengan Kunci Sandi
+    // Tombol Hapus Semua Data Online (Dilindungi Sandi)
     document.getElementById('clearAll').addEventListener('click',()=>{
-      const pass = prompt('🔒 Masukkan Sandi Admin untuk menghapus SEMUA data online:');
+      const pass = prompt('Masukkan Sandi Admin untuk menghapus SEMUA data online:');
       if(pass === null) return;
       if(pass !== ADMIN_PASSWORD) {
-        alert('❌ Sandi salah! Tindakan dibatalkan.');
+        alert('Sandi salah! Tindakan dibatalkan.');
         return;
       }
 
