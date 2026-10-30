@@ -325,20 +325,55 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
     const form = document.getElementById('customerForm');
     let photoCache = {};
 
+    // Fungsi Kompresi Foto
+    function compressImage(file, callback) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          const MAX_WIDTH = 800;
+          const MAX_HEIGHT = 800;
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          callback(compressedDataUrl);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
     const photoInputs=[...document.querySelectorAll('input[type="file"][data-photo]')];
     photoInputs.forEach(input=>input.addEventListener('change',()=>{
       const img=document.getElementById('prev-'+input.id);
       const dlBtn=document.getElementById('dl-btn-'+input.id);
       const file=input.files && input.files[0];
       if(file){
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          img.src = e.target.result;
+        compressImage(file, function(compressedUrl) {
+          img.src = compressedUrl;
           img.style.display = 'block';
           if(dlBtn) dlBtn.style.display = 'inline-flex';
-          photoCache[input.dataset.photo] = e.target.result;
-        };
-        reader.readAsDataURL(file);
+          photoCache[input.dataset.photo] = compressedUrl;
+        });
       }else{
         img.removeAttribute('src');
         img.style.display='none';
