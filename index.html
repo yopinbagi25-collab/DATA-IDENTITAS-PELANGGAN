@@ -53,6 +53,10 @@ textarea{min-height:82px;resize:vertical}
 .hint{font-size:12px;color:#94a3b8;line-height:1.45}
 .location-row,.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+
+/* Tombol khusus Ambil Lokasi GPS agar lebih kecil & pas */
+#getLocation{padding:8px 12px;font-size:12px;white-space:nowrap;}
+
 .primary{background:var(--blue);color:#fff}.secondary{background:#183b56;color:#fff;border:1px solid var(--line)}.danger{background:#7f1d1d;color:#fecaca}.success{background:#10b981;color:#fff}
 .photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 
@@ -157,18 +161,65 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
   <input type="hidden" id="editKey" value="">
   <div class="section-title">IDENTITAS PELANGGAN</div>
   <div class="grid">
-    <div class="field"><label for="nik">MASUKAN NIK</label><input id="nik" name="nik" inputmode="numeric" maxlength="16" placeholder="Masukkan 16 digit NIK" autocomplete="off" required><span class="hint">Data identitas bersifat pribadi. Simpan file di perangkat yang aman.</span></div>
-    <div class="field"><label for="nama">NAMA LENGKAP</label><input id="nama" name="nama" placeholder="Nama lengkap sesuai KTP" autocomplete="off" required></div>
-    <div class="field"><label for="jk">JENIS KELAMIN</label><select id="jk" name="jenis_kelamin" required><option value="">-- Pilih jenis kelamin --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
-    <div class="field"><label for="pekerjaan">PEKERJAAN</label><input id="pekerjaan" name="pekerjaan" placeholder="Contoh: Wiraswasta" autocomplete="off"></div>
-    <div class="field full"><label for="alamat">ALAMAT LENGKAP</label><textarea id="alamat" name="alamat" placeholder="Jalan, dusun/kelurahan, kecamatan, kabupaten" autocomplete="off" required></textarea></div>
-    <div class="field"><label for="hp">NOMOR HANDPHONE / WHATSAPP</label><input id="hp" name="nomor_handphone" type="tel" placeholder="Contoh: 08xxxxxxxxxx" autocomplete="off" required></div>
-    <div class="field"><label for="tanggal">TANGGAL PENDATAAN</label><input id="tanggal" name="tanggal_pendataan" type="date"></div>
-    <div class="field full"><label>TITIK KOORDINAT LOKASI RUMAH</label>
-      <div class="location-row"><input id="lokasi" name="titik_lokasi" placeholder="Koordinat GPS atau tautan Google Maps" autocomplete="off"><button type="button" class="secondary" id="getLocation">Ambil Lokasi GPS Rumah Anda </button></div>
-      <span class="hint">Izinkan Akses Lokasi Pada Browser</span>
+    <!-- Baris 1: NIK & Nama Lengkap -->
+    <div class="field">
+      <label for="nik">MASUKAN NIK</label>
+      <input id="nik" name="nik" inputmode="numeric" maxlength="16" placeholder="Masukkan 16 digit NIK" autocomplete="off" required>
+    </div>
+    <div class="field">
+      <label for="nama">NAMA LENGKAP</label>
+      <input id="nama" name="nama" placeholder="Nama lengkap sesuai KTP" autocomplete="off" required>
+    </div>
+
+    <!-- Baris 2: Jenis Kelamin & Pekerjaan -->
+    <div class="field">
+      <label for="jk">JENIS KELAMIN</label>
+      <select id="jk" name="jenis_kelamin" required>
+        <option value="">-- Pilih jenis kelamin --</option>
+        <option>Laki-laki</option>
+        <option>Perempuan</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="pekerjaan">PEKERJAAN</label>
+      <input id="pekerjaan" name="pekerjaan" placeholder="Contoh: Wiraswasta" autocomplete="off">
+    </div>
+
+    <!-- Baris 3: Paket Layanan WiFi & Tanggal Pendataan -->
+    <div class="field">
+      <label for="paket">PAKET LAYANAN WIFI</label>
+      <select id="paket" name="paket_layanan" required>
+        <option value="">-- Pilih Paket Layanan WiFi --</option>
+        <option value="Voucher Harian">Voucher Harian</option>
+        <option value="Voucher Bulanan">Voucher Bulanan</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="tanggal">TANGGAL PENDATAAN</label>
+      <input id="tanggal" name="tanggal_pendataan" type="date">
+    </div>
+
+    <!-- Baris 4: Titik Koordinat Lokasi & Nomor HP/WA (Berdampingan) -->
+    <div class="field">
+      <label>TITIK KOORDINAT LOKASI RUMAH</label>
+      <div class="location-row">
+        <input id="lokasi" name="titik_lokasi" placeholder="Koordinat GPS / Maps" autocomplete="off">
+        <button type="button" class="secondary" id="getLocation">Ambil Lokasi Maps Rumah Anda</button>
+      </div>
+    </div>
+	
+    <div class="field">
+      <label for="hp">NOMOR HANDPHONE / WHATSAPP</label>
+      <input id="hp" name="nomor_handphone" type="tel" placeholder="Contoh: 08xxxxxxxxxx" autocomplete="off" required>
+    </div>
+
+    <!-- Baris 5: Alamat Lengkap (Full Width) -->
+    <div class="field full">
+      <label for="alamat">ALAMAT LENGKAP PEMASANGAN WIFI</label>
+      <textarea id="alamat" name="alamat" placeholder="Jalan, dusun/kelurahan, kecamatan, kabupaten" autocomplete="off" required></textarea>
     </div>
   </div>
+
   <div class="section-title" style="margin-top:28px">DOKUMENTASI PELANGGAN</div>
   <div class="photos">
     <div class="photo-card">
@@ -199,16 +250,18 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur/gelap</span>
     </div>
   </div>
+
   <div class="actions">
     <button class="primary" type="submit" id="submitBtn">SIMPAN DATA</button>
     <button class="secondary" type="button" id="adminDownloadJson">EKSPOR JSON</button>
     <button class="secondary" type="button" id="adminImportJson">IMPOR JSON</button>
     <button class="secondary" type="button" id="adminExportCsv">EKSPOR CSV</button>
-	<input type="file" id="importJsonFile" accept=".json" style="display:none">
+    <input type="file" id="importJsonFile" accept=".json" style="display:none">
     <button class="secondary" type="button" id="adminPrintForm">CETAK FORMULIR</button>
   </div>
   <p class="hint">Data yang disimpan tersimpan di perangkat ini dan terkirim otomatis ke Realtime Database</p>
 </form>
+
 <section class="records">
   <div class="section-title">DATA TERSIMPAN SECARA ONLINE</div>
   <div id="recordList">
@@ -234,9 +287,10 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       <div class="modal-item"><label>Nama Pelanggan</label><div id="m-nama">-</div></div>
       <div class="modal-item"><label>Jenis Kelamin</label><div id="m-jk">-</div></div>
       <div class="modal-item"><label>Pekerjaan</label><div id="m-pekerjaan">-</div></div>
-      <div class="modal-item"><label>Nomor HP / WhatsApp</label><div id="m-hp" style="color:#60a5fa">-</div></div>
+      <div class="modal-item"><label>Paket Layanan WiFi</label><div id="m-paket" style="color:#38bdf8;font-weight:bold;">-</div></div>
       <div class="modal-item"><label>Tanggal Pendataan</label><div id="m-tanggal">-</div></div>
-      <div class="modal-item full" style="grid-column:1/-1"><label>Titik Koordinat / Maps</label><div id="m-lokasi">-</div></div>
+      <div class="modal-item"><label>Nomor HP / WhatsApp</label><div id="m-hp" style="color:#60a5fa">-</div></div>
+      <div class="modal-item"><label>Titik Koordinat / Maps</label><div id="m-lokasi">-</div></div>
       <div class="modal-item full" style="grid-column:1/-1"><label>Alamat Lengkap</label><div id="m-alamat">-</div></div>
     </div>
     
@@ -282,10 +336,11 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
         <div class="field"><label for="m-edit-nama">Nama Pelanggan</label><input id="m-edit-nama" required></div>
         <div class="field"><label for="m-edit-jk">Jenis Kelamin</label><select id="m-edit-jk" required><option value="">-- Pilih --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
         <div class="field"><label for="m-edit-pekerjaan">Pekerjaan</label><input id="m-edit-pekerjaan"></div>
-        <div class="field"><label for="m-edit-hp">Nomor HP / WhatsApp</label><input id="m-edit-hp" type="tel" required></div>
+        <div class="field"><label for="m-edit-paket">Paket Layanan WiFi</label><select id="m-edit-paket" required><option value="">-- Pilih Paket Layanan WiFi --</option><option value="Voucher Harian">Voucher Harian</option><option value="Voucher Bulanan">Voucher Bulanan</option></select></div>
         <div class="field"><label for="m-edit-tanggal">Tanggal Pendataan</label><input id="m-edit-tanggal" type="date"></div>
-        <div class="field full"><label for="m-edit-lokasi">Titik Koordinat / Maps</label><input id="m-edit-lokasi"></div>
-        <div class="field full"><label for="m-edit-alamat">Alamat Lengkap</label><textarea id="m-edit-alamat" required></textarea></div>
+        <div class="field"><label for="m-edit-hp">Nomor HP / WhatsApp</label><input id="m-edit-hp" type="tel" required></div>
+        <div class="field"><label for="m-edit-lokasi">Titik Koordinat / Maps</label><input id="m-edit-lokasi"></div>
+        <div class="field full" style="grid-column:1/-1"><label for="m-edit-alamat">Alamat Lengkap</label><textarea id="m-edit-alamat" required></textarea></div>
       </div>
       <div class="modal-actions">
         <button type="button" class="secondary" id="m-cancelEditBtn" style="background:#1e3a5f;">Batal</button>
@@ -446,7 +501,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
         const strong = document.createElement('strong');
         strong.textContent = r.nama || '(Tanpa nama)';
         const small = document.createElement('small');
-        small.textContent = 'NIK: ' + (r.nik || '-') + ' • HP: ' + (r.nomor_handphone || '-') + ' • ' + (r.tanggal_pendataan || 'Tanggal tidak diisi');
+        small.textContent = 'NIK: ' + (r.nik || '-') + ' • Paket: ' + (r.paket_layanan || '-') + ' • HP: ' + (r.nomor_handphone || '-') + ' • ' + (r.tanggal_pendataan || 'Tanggal tidak diisi');
         info.append(strong, small);
         
         const actions = document.createElement('div');
@@ -480,8 +535,9 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       document.getElementById('m-nama').textContent = r.nama || '-';
       document.getElementById('m-jk').textContent = r.jenis_kelamin || '-';
       document.getElementById('m-pekerjaan').textContent = r.pekerjaan || '-';
-      document.getElementById('m-hp').textContent = r.nomor_handphone || '-';
+      document.getElementById('m-paket').textContent = r.paket_layanan || '-';
       document.getElementById('m-tanggal').textContent = r.tanggal_pendataan || '-';
+      document.getElementById('m-hp').textContent = r.nomor_handphone || '-';
       document.getElementById('m-lokasi').textContent = r.titik_lokasi || '-';
       document.getElementById('m-alamat').textContent = r.alamat || '-';
 
@@ -543,8 +599,9 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       document.getElementById('m-edit-nama').value = r.nama || '';
       document.getElementById('m-edit-jk').value = r.jenis_kelamin || '';
       document.getElementById('m-edit-pekerjaan').value = r.pekerjaan || '';
-      document.getElementById('m-edit-hp').value = r.nomor_handphone || '';
+      document.getElementById('m-edit-paket').value = r.paket_layanan || '';
       document.getElementById('m-edit-tanggal').value = r.tanggal_pendataan || '';
+      document.getElementById('m-edit-hp').value = r.nomor_handphone || '';
       document.getElementById('m-edit-lokasi').value = r.titik_lokasi || '';
       document.getElementById('m-edit-alamat').value = r.alamat || '';
 
@@ -576,8 +633,9 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
         nama: document.getElementById('m-edit-nama').value.trim(),
         jenis_kelamin: document.getElementById('m-edit-jk').value,
         pekerjaan: document.getElementById('m-edit-pekerjaan').value.trim(),
-        nomor_handphone: document.getElementById('m-edit-hp').value.trim(),
+        paket_layanan: document.getElementById('m-edit-paket').value,
         tanggal_pendataan: document.getElementById('m-edit-tanggal').value,
+        nomor_handphone: document.getElementById('m-edit-hp').value.trim(),
         titik_lokasi: document.getElementById('m-edit-lokasi').value.trim(),
         alamat: document.getElementById('m-edit-alamat').value.trim()
       };
@@ -660,7 +718,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       if(pass !== ADMIN_PASSWORD) { alert('Sandi salah!'); return; }
 
       if(!currentPelangganData.length){alert('Belum ada data tersimpan untuk diekspor ke CSV.');return;}
-      const keys = ['nik','nama','jenis_kelamin','pekerjaan','alamat','nomor_handphone','tanggal_pendataan','titik_lokasi','dibuat_pada'];
+      const keys = ['nik','nama','jenis_kelamin','pekerjaan','paket_layanan','alamat','nomor_handphone','tanggal_pendataan','titik_lokasi','dibuat_pada'];
       let csv = keys.join(',') + '\n';
       currentPelangganData.forEach(r=>{
         csv += keys.map(k => `"${(r[k]||'').replace(/"/g, '""')}"`).join(',') + '\n';
