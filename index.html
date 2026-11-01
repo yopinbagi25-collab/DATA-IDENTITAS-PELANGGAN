@@ -64,6 +64,8 @@ button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:point
 .photo-card{border:1px dashed var(--line);border-radius:12px;padding:14px;background:#0b1926;text-align:center;}
 .photo-card label{display:block;margin-bottom:10px;text-align:center;}
 .photo-card .hint{text-align:center;}
+.photo-btn-group{display:flex;gap:6px;justify-content:center;margin-bottom:8px;flex-wrap:wrap;}
+.photo-btn-group button{font-size:11px;padding:8px 10px;}
 
 .preview{width:100%;height:145px;object-fit:contain;background:#183b56;border-radius:8px;margin-top:10px;display:none}
 .actions{margin-top:24px}
@@ -222,27 +224,47 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
 
   <div class="section-title" style="margin-top:28px">DOKUMENTASI PELANGGAN</div>
   <div class="photos">
+    <!-- FOTO KTP -->
     <div class="photo-card">
-      <label for="ktp">FOTO KTP</label>
-      <input id="ktp" type="file" accept="image/*" capture="environment" data-photo="foto_ktp">
+      <label>FOTO KTP</label>
+      <input id="ktp" type="file" accept="image/*" capture="environment" data-photo="foto_ktp" style="display:none">
+      <input id="ktp_galeri" type="file" accept="image/*" data-photo="foto_ktp" style="display:none">
+      <div class="photo-btn-group">
+        <button type="button" class="secondary" onclick="document.getElementById('ktp').click();">📸 Ambil Kamera</button>
+        <button type="button" class="secondary" onclick="document.getElementById('ktp_galeri').click();" style="background:#1e3a5f;">🖼️ Pilih Galeri</button>
+      </div>
       <img class="preview" id="prev-ktp" alt="Pratinjau foto KTP">
       <div style="margin-top:8px;">
         <button type="button" class="secondary" id="dl-btn-ktp" style="display:none;width:100%;font-size:12px;padding:8px;justify-content:center;" onclick="downloadSinglePhoto('foto_ktp', 'ktp')">📥 Unduh Foto KTP</button>
       </div>
       <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur/gelap</span>
     </div>
+
+    <!-- FOTO DEPAN RUMAH -->
     <div class="photo-card">
-      <label for="rumah">FOTO DEPAN RUMAH</label>
-      <input id="rumah" type="file" accept="image/*" capture="environment" data-photo="foto_rumah">
+      <label>FOTO DEPAN RUMAH</label>
+      <input id="rumah" type="file" accept="image/*" capture="environment" data-photo="foto_rumah" style="display:none">
+      <input id="rumah_galeri" type="file" accept="image/*" data-photo="foto_rumah" style="display:none">
+      <div class="photo-btn-group">
+        <button type="button" class="secondary" onclick="document.getElementById('rumah').click();">📸 Ambil Kamera</button>
+        <button type="button" class="secondary" onclick="document.getElementById('rumah_galeri').click();" style="background:#1e3a5f;">🖼️ Pilih Galeri</button>
+      </div>
       <img class="preview" id="prev-rumah" alt="Pratinjau foto rumah">
       <div style="margin-top:8px;">
         <button type="button" class="secondary" id="dl-btn-rumah" style="display:none;width:100%;font-size:12px;padding:8px;justify-content:center;" onclick="downloadSinglePhoto('foto_rumah', 'rumah')">📥 Unduh Foto Rumah</button>
       </div>
       <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur/gelap</span>
     </div>
+
+    <!-- FOTO ALAT WIFI -->
     <div class="photo-card">
-      <label for="alat">FOTO ALAT WIFI YANG TERPASANG</label>
-      <input id="alat" type="file" accept="image/*" capture="environment" data-photo="foto_alat_wifi">
+      <label>FOTO ALAT WIFI YANG TERPASANG</label>
+      <input id="alat" type="file" accept="image/*" capture="environment" data-photo="foto_alat_wifi" style="display:none">
+      <input id="alat_galeri" type="file" accept="image/*" data-photo="foto_alat_wifi" style="display:none">
+      <div class="photo-btn-group">
+        <button type="button" class="secondary" onclick="document.getElementById('alat').click();">📸 Ambil Kamera</button>
+        <button type="button" class="secondary" onclick="document.getElementById('alat_galeri').click();" style="background:#1e3a5f;">🖼️ Pilih Galeri</button>
+      </div>
       <img class="preview" id="prev-alat" alt="Pratinjau alat WiFi">
       <div style="margin-top:8px;">
         <button type="button" class="secondary" id="dl-btn-alat" style="display:none;width:100%;font-size:12px;padding:8px;justify-content:center;" onclick="downloadSinglePhoto('foto_alat_wifi', 'alat')">📥 Unduh Foto Alat WiFi</button>
@@ -419,8 +441,9 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
 
     const photoInputs=[...document.querySelectorAll('input[type="file"][data-photo]')];
     photoInputs.forEach(input=>input.addEventListener('change',()=>{
-      const img=document.getElementById('prev-'+input.id);
-      const dlBtn=document.getElementById('dl-btn-'+input.id);
+      const baseId = input.id.replace('_galeri', '');
+      const img=document.getElementById('prev-'+baseId);
+      const dlBtn=document.getElementById('dl-btn-'+baseId);
       const file=input.files && input.files[0];
       if(file){
         compressImage(file, function(compressedUrl) {
@@ -785,7 +808,8 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       }
     });
 
-    form.addEventListener('reset',()=>{setTimeout(()=>{photoInputs.forEach(input=>{const img=document.getElementById('prev-'+input.id);img.removeAttribute('src');img.style.display='none';const dlBtn=document.getElementById('dl-btn-'+input.id);if(dlBtn)dlBtn.style.display='none';});document.getElementById('editKey').value='';document.getElementById('submitBtn').textContent='SIMPAN DATA';photoCache={};},0)});
+    form.addEventListener('reset',()=>{setTimeout(()=>{photoInputs.forEach(input=>{const baseId=input.id.replace('_galeri','');const img=document.getElementById('prev-'+baseId);if(img){img.removeAttribute('src');img.style.display='none';}const dlBtn=document.getElementById('dl-btn-'+baseId);if(dlBtn)dlBtn.style.display='none';});document.getElementById('editKey').value='';document.getElementById('submitBtn').textContent='SIMPAN DATA';photoCache={};},0)});
 </script>
 </body>
 </html>
+```eof
