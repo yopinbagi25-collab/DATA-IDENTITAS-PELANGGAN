@@ -192,17 +192,17 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
     <!-- Baris 1: NIK & Nama Lengkap -->
     <div class="field">
       <label for="nik">MASUKAN NIK</label>
-      <input id="nik" name="nik" inputmode="numeric" maxlength="16" placeholder="Masukkan 16 digit NIK" autocomplete="off" required>
+      <input id="nik" name="nik" inputmode="numeric" maxlength="16" placeholder="Masukkan 16 digit NIK" autocomplete="off">
     </div>
     <div class="field">
       <label for="nama">NAMA LENGKAP</label>
-      <input id="nama" name="nama" placeholder="Nama lengkap sesuai KTP" autocomplete="off" required>
+      <input id="nama" name="nama" placeholder="Nama lengkap sesuai KTP" autocomplete="off">
     </div>
 
     <!-- Baris 2: Jenis Kelamin & Pekerjaan -->
     <div class="field">
       <label for="jk">JENIS KELAMIN</label>
-      <select id="jk" name="jenis_kelamin" required>
+      <select id="jk" name="jenis_kelamin">
         <option value="">-- Pilih jenis kelamin --</option>
         <option>Laki-laki</option>
         <option>Perempuan</option>
@@ -216,7 +216,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
     <!-- Baris 3: Paket Layanan WiFi & Tanggal Pendataan -->
     <div class="field">
       <label for="paket">PAKET LAYANAN WIFI</label>
-      <select id="paket" name="paket_layanan" required>
+      <select id="paket" name="paket_layanan">
         <option value="">-- Pilih Paket Layanan WiFi --</option>
         <option value="Voucher Harian">Voucher Harian</option>
         <option value="Voucher Bulanan">Voucher Bulanan</option>
@@ -238,13 +238,13 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
 	
     <div class="field">
       <label for="hp">NOMOR HANDPHONE / WHATSAPP</label>
-      <input id="hp" name="nomor_handphone" type="tel" placeholder="Contoh: 08xxxxxxxxxx" autocomplete="off" required>
+      <input id="hp" name="nomor_handphone" type="tel" placeholder="Contoh: 08xxxxxxxxxx" autocomplete="off">
     </div>
 
     <!-- Baris 5: Alamat Lengkap (Full Width) -->
     <div class="field full">
       <label for="alamat">ALAMAT LENGKAP PEMASANGAN WIFI</label>
-      <textarea id="alamat" name="alamat" placeholder="Jalan, dusun/kelurahan, kecamatan, kabupaten" autocomplete="off" required></textarea>
+      <textarea id="alamat" name="alamat" placeholder="Jalan, dusun/kelurahan, kecamatan, kabupaten" autocomplete="off"></textarea>
     </div>
   </div>
 
@@ -389,15 +389,15 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
     <form id="editFormModal" autocomplete="off">
       <input type="hidden" id="modalEditKey" value="">
       <div class="modal-grid" style="gap:12px;margin-bottom:14px;">
-        <div class="field"><label for="m-edit-nik">NIK</label><input id="m-edit-nik" inputmode="numeric" maxlength="16" required></div>
-        <div class="field"><label for="m-edit-nama">Nama Pelanggan</label><input id="m-edit-nama" required></div>
-        <div class="field"><label for="m-edit-jk">Jenis Kelamin</label><select id="m-edit-jk" required><option value="">-- Pilih --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
+        <div class="field"><label for="m-edit-nik">NIK</label><input id="m-edit-nik" inputmode="numeric" maxlength="16"></div>
+        <div class="field"><label for="m-edit-nama">Nama Pelanggan</label><input id="m-edit-nama"></div>
+        <div class="field"><label for="m-edit-jk">Jenis Kelamin</label><select id="m-edit-jk"><option value="">-- Pilih --</option><option>Laki-laki</option><option>Perempuan</option></select></div>
         <div class="field"><label for="m-edit-pekerjaan">Pekerjaan</label><input id="m-edit-pekerjaan"></div>
-        <div class="field"><label for="m-edit-paket">Paket Layanan WiFi</label><select id="m-edit-paket" required><option value="">-- Pilih Paket Layanan WiFi --</option><option value="Voucher Harian">Voucher Harian</option><option value="Voucher Bulanan">Voucher Bulanan</option></select></div>
+        <div class="field"><label for="m-edit-paket">Paket Layanan WiFi</label><select id="m-edit-paket"><option value="">-- Pilih Paket Layanan WiFi --</option><option value="Voucher Harian">Voucher Harian</option><option value="Voucher Bulanan">Voucher Bulanan</option></select></div>
         <div class="field"><label for="m-edit-tanggal">Tanggal Pendataan</label><input id="m-edit-tanggal" type="date"></div>
-        <div class="field"><label for="m-edit-hp">Nomor HP / WhatsApp</label><input id="m-edit-hp" type="tel" required></div>
+        <div class="field"><label for="m-edit-hp">Nomor HP / WhatsApp</label><input id="m-edit-hp" type="tel"></div>
         <div class="field"><label for="m-edit-lokasi">Titik Koordinat / Maps</label><input id="m-edit-lokasi"></div>
-        <div class="field full" style="grid-column:1/-1"><label for="m-edit-alamat">Alamat Lengkap</label><textarea id="m-edit-alamat" required></textarea></div>
+        <div class="field full" style="grid-column:1/-1"><label for="m-edit-alamat">Alamat Lengkap</label><textarea id="m-edit-alamat"></textarea></div>
       </div>
       <div class="modal-actions">
         <button type="button" class="secondary" id="m-cancelEditBtn" style="background:#1e3a5f;">Batal</button>
@@ -690,11 +690,72 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
     document.getElementById('m-cancelEditBtn').onclick = closeEditModalFunc;
     document.getElementById('editModal').onclick = (e)=>{ if(e.target === document.getElementById('editModal')) closeEditModalFunc(); };
 
-    // Simpan Perubahan dari Modal Edit
+    // Pengecekan teks asal-asalan / simbol berulang
+    function isJunkText(text) {
+      if(!text) return true;
+      const clean = text.trim();
+      if(clean.length === 0) return true;
+      return /^[\s.,\-_+*=!@#$%^&*()]+$/.test(clean) || /^(.)\1+$/.test(clean);
+    }
+
+    // Simpan Perubahan dari Modal Edit dengan Validasi Lengkap
     document.getElementById('editFormModal').addEventListener('submit', async e=>{
       e.preventDefault();
       const nik = document.getElementById('m-edit-nik').value.trim();
-      if(!/^\d{16}$/.test(nik)){alert('NIK harus terdiri dari 16 digit angka.');return;}
+      const nama = document.getElementById('m-edit-nama').value.trim();
+      const jk = document.getElementById('m-edit-jk').value;
+      const pekerjaan = document.getElementById('m-edit-pekerjaan').value.trim();
+      const paket = document.getElementById('m-edit-paket').value;
+      const tanggal = document.getElementById('m-edit-tanggal').value;
+      const hp = document.getElementById('m-edit-hp').value.trim();
+      const lokasi = document.getElementById('m-edit-lokasi').value.trim();
+      const alamat = document.getElementById('m-edit-alamat').value.trim();
+
+      if(!/^\d{16}$/.test(nik)){
+        alert('⚠️ Peringatan: NIK harus diisi dengan 16 digit angka yang benar!');
+        document.getElementById('m-edit-nik').focus();
+        return;
+      }
+      if(isJunkText(nama) || nama.length < 3){
+        alert('⚠️ Peringatan: Nama Lengkap wajib diisi dengan benar (tidak boleh asal / simbol titik/strip)!');
+        document.getElementById('m-edit-nama').focus();
+        return;
+      }
+      if(!jk){
+        alert('⚠️ Peringatan: Jenis Kelamin wajib dipilih!');
+        document.getElementById('m-edit-jk').focus();
+        return;
+      }
+      if(isJunkText(pekerjaan) || pekerjaan.length < 2){
+        alert('⚠️ Peringatan: Kolom Pekerjaan wajib diisi dengan benar!');
+        document.getElementById('m-edit-pekerjaan').focus();
+        return;
+      }
+      if(!paket){
+        alert('⚠️ Peringatan: Paket Layanan WiFi wajib dipilih!');
+        document.getElementById('m-edit-paket').focus();
+        return;
+      }
+      if(!tanggal){
+        alert('⚠️ Peringatan: Tanggal Pendataan wajib diisi!');
+        document.getElementById('m-edit-tanggal').focus();
+        return;
+      }
+      if(isJunkText(lokasi) || lokasi.length < 5){
+        alert('⚠️ Peringatan: Titik Koordinat Lokasi wajib diisi / diambil dari Maps!');
+        document.getElementById('m-edit-lokasi').focus();
+        return;
+      }
+      if(!hp || isJunkText(hp) || hp.length < 9){
+        alert('⚠️ Peringatan: Nomor HP / WhatsApp wajib diisi dengan nomor yang valid!');
+        document.getElementById('m-edit-hp').focus();
+        return;
+      }
+      if(isJunkText(alamat) || alamat.length < 5){
+        alert('⚠️ Peringatan: Alamat Lengkap pemasangan WiFi wajib diisi dengan jelas!');
+        document.getElementById('m-edit-alamat').focus();
+        return;
+      }
 
       const editKey = document.getElementById('modalEditKey').value;
       if(!editKey) return;
@@ -705,14 +766,14 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
 
       const updatedData = {
         nik: nik,
-        nama: document.getElementById('m-edit-nama').value.trim(),
-        jenis_kelamin: document.getElementById('m-edit-jk').value,
-        pekerjaan: document.getElementById('m-edit-pekerjaan').value.trim(),
-        paket_layanan: document.getElementById('m-edit-paket').value,
-        tanggal_pendataan: document.getElementById('m-edit-tanggal').value,
-        nomor_handphone: document.getElementById('m-edit-hp').value.trim(),
-        titik_lokasi: document.getElementById('m-edit-lokasi').value.trim(),
-        alamat: document.getElementById('m-edit-alamat').value.trim()
+        nama: nama,
+        jenis_kelamin: jk,
+        pekerjaan: pekerjaan,
+        paket_layanan: paket,
+        tanggal_pendataan: tanggal,
+        nomor_handphone: hp,
+        titik_lokasi: lokasi,
+        alamat: alamat
       };
 
       try {
@@ -727,11 +788,82 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       }
     });
 
-    // Tombol Submit Formulir Utama (Tambah Data Baru - Terbuka untuk umum mengisi data)
+    // Tombol Submit Formulir Utama (Semua Kolom Wajib Diisi & Validasi Ketat)
     form.addEventListener('submit', async e=>{
       e.preventDefault();
-      const nik=document.getElementById('nik').value.trim();
-      if(!/^\d{16}$/.test(nik)){alert('NIK harus terdiri dari 16 digit angka.');return;}
+      
+      const nik = document.getElementById('nik').value.trim();
+      const nama = document.getElementById('nama').value.trim();
+      const jk = document.getElementById('jk').value;
+      const pekerjaan = document.getElementById('pekerjaan').value.trim();
+      const paket = document.getElementById('paket').value;
+      const tanggal = document.getElementById('tanggal').value;
+      const lokasi = document.getElementById('lokasi').value.trim();
+      const hp = document.getElementById('hp').value.trim();
+      const alamat = document.getElementById('alamat').value.trim();
+
+      // 1. Validasi NIK wajib 16 digit angka
+      if(!/^\d{16}$/.test(nik)){
+        alert('⚠️ Peringatan: Kolom NIK wajib diisi dengan 16 digit angka yang benar!');
+        document.getElementById('nik').focus();
+        return;
+      }
+
+      // 2. Validasi Nama Lengkap
+      if(isJunkText(nama) || nama.length < 3){
+        alert('⚠️ Peringatan: Kolom Nama Lengkap wajib diisi dengan benar sesuai KTP (tidak boleh asal-asalan seperti titik, koma, atau strip)!');
+        document.getElementById('nama').focus();
+        return;
+      }
+
+      // 3. Validasi Jenis Kelamin
+      if(!jk){
+        alert('⚠️ Peringatan: Jenis Kelamin wajib dipilih terlebih dahulu!');
+        document.getElementById('jk').focus();
+        return;
+      }
+
+      // 4. Validasi Pekerjaan
+      if(isJunkText(pekerjaan) || pekerjaan.length < 2){
+        alert('⚠️ Peringatan: Kolom Pekerjaan wajib diisi dengan benar (contoh: Wiraswasta, Petani, PNS)!');
+        document.getElementById('pekerjaan').focus();
+        return;
+      }
+
+      // 5. Validasi Paket Layanan WiFi
+      if(!paket){
+        alert('⚠️ Peringatan: Paket Layanan WiFi wajib dipilih!');
+        document.getElementById('paket').focus();
+        return;
+      }
+
+      // 6. Validasi Tanggal Pendataan
+      if(!tanggal){
+        alert('⚠️ Peringatan: Tanggal Pendataan wajib diisi!');
+        document.getElementById('tanggal').focus();
+        return;
+      }
+
+      // 7. Validasi Titik Koordinat Lokasi Rumah
+      if(isJunkText(lokasi) || lokasi.length < 5){
+        alert('⚠️ Peringatan: Titik Koordinat Lokasi Rumah wajib diisi! Silakan klik tombol "Ambil Lokasi Maps Rumah Anda" atau isi manual.');
+        document.getElementById('lokasi').focus();
+        return;
+      }
+
+      // 8. Validasi Nomor Handphone / WhatsApp
+      if(!hp || isJunkText(hp) || hp.length < 9){
+        alert('⚠️ Peringatan: Nomor Handphone / WhatsApp wajib diisi dengan nomor aktif yang valid!');
+        document.getElementById('hp').focus();
+        return;
+      }
+
+      // 9. Validasi Alamat Lengkap Pemasangan WiFi
+      if(isJunkText(alamat) || alamat.length < 5){
+        alert('⚠️ Peringatan: Alamat Lengkap Pemasangan WiFi wajib diisi dengan jelas (jalan, dusun/kelurahan, kecamatan)!');
+        document.getElementById('alamat').focus();
+        return;
+      }
       
       const submitBtn = document.getElementById('submitBtn');
       submitBtn.textContent = 'Menyimpan ke Cloud...';
