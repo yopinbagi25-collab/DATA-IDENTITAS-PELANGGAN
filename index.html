@@ -136,7 +136,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
   <div class="tujuan-content" id="tujuanContentBox">
     <div class="surat-header">
       <h3>📄 Tujuan Pendataan Pelanggan Sebagai Berikut : </h3>
-      <p style="margin:0;font-size:15px;color:#94a3b8;">Semua data pelanggan di jamin 100% aman dari penyalahgunaan</p>
+      <p style="margin:0;font-size:15px;color:#9fb3c8;">Semua data pelanggan di jamin 100% aman dari penyalahgunaan</p>
     </div>
 
     <div class="pimpinan-info">
@@ -379,9 +379,9 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
   </div>
 </div>
 
-<!-- Modal Edit Pelanggan -->
+<!-- Modal Edit Pelanggan (Sudah Diperbarui Dengan Menu Foto Interaktif) -->
 <div class="modal-overlay" id="editModal">
-  <div class="modal-content" style="max-width:800px;">
+  <div class="modal-content" style="max-width:850px;">
     <div class="modal-header">
       <h3 id="editModalTitle">✏️ Edit Data Pelanggan</h3>
       <button class="close-modal" id="closeEditModal">×</button>
@@ -399,6 +399,50 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
         <div class="field"><label for="m-edit-lokasi">Titik Koordinat / Maps</label><input id="m-edit-lokasi"></div>
         <div class="field full" style="grid-column:1/-1"><label for="m-edit-alamat">Alamat Lengkap</label><textarea id="m-edit-alamat"></textarea></div>
       </div>
+
+      <!-- FITUR FOTO BARU DI MODAL EDIT -->
+      <div style="font-size:13px;font-weight:700;color:#9fb3c8;margin:18px 0 10px;text-transform:uppercase;border-top:1px solid var(--line);padding-top:14px;">Update Dokumentasi Pelanggan</div>
+      <div class="photos" style="margin-bottom:15px;">
+        <!-- EDIT FOTO KTP -->
+        <div class="photo-card">
+          <label style="font-size:12px;">FOTO KTP</label>
+          <input id="m-edit-ktp" type="file" accept="image/*" capture="environment" style="display:none">
+          <input id="m-edit-ktp-galeri" type="file" accept="image/*" style="display:none">
+          <div class="photo-btn-group">
+            <button type="button" class="secondary" onclick="document.getElementById('m-edit-ktp').click();">📸 Ambil Kamera</button>
+            <button type="button" class="secondary" onclick="document.getElementById('m-edit-ktp-galeri').click();" style="background:#1e3a5f;">🖼️ Pilih Galeri</button>
+          </div>
+          <img class="preview" id="m-edit-prev-ktp" alt="Pratinjau foto KTP">
+          <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur/gelap</span>
+        </div>
+
+        <!-- EDIT FOTO DEPAN RUMAH -->
+        <div class="photo-card">
+          <label style="font-size:12px;">FOTO DEPAN RUMAH</label>
+          <input id="m-edit-rumah" type="file" accept="image/*" capture="environment" style="display:none">
+          <input id="m-edit-rumah-galeri" type="file" accept="image/*" style="display:none">
+          <div class="photo-btn-group">
+            <button type="button" class="secondary" onclick="document.getElementById('m-edit-rumah').click();">📸 Ambil Kamera</button>
+            <button type="button" class="secondary" onclick="document.getElementById('m-edit-rumah-galeri').click();" style="background:#1e3a5f;">🖼️ Pilih Galeri</button>
+          </div>
+          <img class="preview" id="m-edit-prev-rumah" alt="Pratinjau foto rumah">
+          <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur/gelap</span>
+        </div>
+
+        <!-- EDIT FOTO ALAT WIFI -->
+        <div class="photo-card">
+          <label style="font-size:12px;">FOTO ALAT WIFI YANG TERPASANG</label>
+          <input id="m-edit-alat" type="file" accept="image/*" capture="environment" style="display:none">
+          <input id="m-edit-alat-galeri" type="file" accept="image/*" style="display:none">
+          <div class="photo-btn-group">
+            <button type="button" class="secondary" onclick="document.getElementById('m-edit-alat').click();">📸 Ambil Kamera</button>
+            <button type="button" class="secondary" onclick="document.getElementById('m-edit-alat-galeri').click();" style="background:#1e3a5f;">🖼️ Pilih Galeri</button>
+          </div>
+          <img class="preview" id="m-edit-prev-alat" alt="Pratinjau alat WiFi">
+          <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur/gelap</span>
+        </div>
+      </div>
+
       <div class="modal-actions">
         <button type="button" class="secondary" id="m-cancelEditBtn" style="background:#1e3a5f;">Batal</button>
         <button type="submit" class="primary" id="m-saveEditBtn">💾 Simpan Perubahan</button>
@@ -411,6 +455,10 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
     // SANDI KEAMANAN ADMIN (Ubah sandi di bawah ini jika ingin menggantinya)
     const ADMIN_PASSWORD = "Terlambat1234";
     let isAdminUnlocked = false;
+
+    // Cache foto terpisah untuk Form Utama dan Modal Edit
+    let photoCache = {};
+    let editPhotoCache = {};
 
     // Script Toggle Tombol Tujuan Pendataan
     document.getElementById('toggleTujuanBtn').addEventListener('click', function() {
@@ -435,7 +483,6 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
     let currentPelangganData = [];
 
     const form = document.getElementById('customerForm');
-    let photoCache = {};
 
     // Fungsi Kompresi Foto agar Proses Simpan Cepat
     function compressImage(file, callback) {
@@ -474,6 +521,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       reader.readAsDataURL(file);
     }
 
+    // Event Listener Input Foto Form Utama
     const photoInputs=[...document.querySelectorAll('input[type="file"][data-photo]')];
     photoInputs.forEach(input=>input.addEventListener('change',()=>{
       const baseId = input.id.replace('_galeri', '');
@@ -493,6 +541,31 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
         if(dlBtn) dlBtn.style.display='none';
       }
     }));
+
+    // Event Listener Input Foto Modal Edit (Kamera & Galeri)
+    const editPhotoConfig = [
+      { ids: ['m-edit-ktp', 'm-edit-ktp-galeri'], prevId: 'm-edit-prev-ktp', key: 'foto_ktp' },
+      { ids: ['m-edit-rumah', 'm-edit-rumah-galeri'], prevId: 'm-edit-prev-rumah', key: 'foto_rumah' },
+      { ids: ['m-edit-alat', 'm-edit-alat-galeri'], prevId: 'm-edit-prev-alat', key: 'foto_alat_wifi' }
+    ];
+
+    editPhotoConfig.forEach(config => {
+      config.ids.forEach(id => {
+        const inputElem = document.getElementById(id);
+        if(!inputElem) return;
+        inputElem.addEventListener('change', () => {
+          const file = inputElem.files && inputElem.files[0];
+          const img = document.getElementById(config.prevId);
+          if(file){
+            compressImage(file, function(compressedUrl) {
+              img.src = compressedUrl;
+              img.style.display = 'block';
+              editPhotoCache[config.key] = compressedUrl;
+            });
+          }
+        });
+      });
+    });
 
     function downloadSinglePhoto(photoKey, typeName){
       const url = photoCache[photoKey];
@@ -668,6 +741,8 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       const r = currentPelangganData.find(item => item.id === id);
       if(!r) return;
 
+      editPhotoCache = {}; // Reset cache foto edit
+
       document.getElementById('modalEditKey').value = r.id;
       document.getElementById('editModalTitle').textContent = '✏️ Edit Data: ' + (r.nama || '');
       document.getElementById('m-edit-nik').value = r.nik || '';
@@ -680,11 +755,43 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       document.getElementById('m-edit-lokasi').value = r.titik_lokasi || '';
       document.getElementById('m-edit-alamat').value = r.alamat || '';
 
+      // Set preview foto eksisting di Modal Edit jika ada
+      const prevKtp = document.getElementById('m-edit-prev-ktp');
+      if(r.foto_ktp) {
+        prevKtp.src = r.foto_ktp;
+        prevKtp.style.display = 'block';
+        editPhotoCache.foto_ktp = r.foto_ktp;
+      } else {
+        prevKtp.removeAttribute('src');
+        prevKtp.style.display = 'none';
+      }
+
+      const prevRumah = document.getElementById('m-edit-prev-rumah');
+      if(r.foto_rumah) {
+        prevRumah.src = r.foto_rumah;
+        prevRumah.style.display = 'block';
+        editPhotoCache.foto_rumah = r.foto_rumah;
+      } else {
+        prevRumah.removeAttribute('src');
+        prevRumah.style.display = 'none';
+      }
+
+      const prevAlat = document.getElementById('m-edit-prev-alat');
+      if(r.foto_alat_wifi) {
+        prevAlat.src = r.foto_alat_wifi;
+        prevAlat.style.display = 'block';
+        editPhotoCache.foto_alat_wifi = r.foto_alat_wifi;
+      } else {
+        prevAlat.removeAttribute('src');
+        prevAlat.style.display = 'none';
+      }
+
       document.getElementById('editModal').style.display = 'flex';
     }
 
     function closeEditModalFunc(){
       document.getElementById('editModal').style.display = 'none';
+      editPhotoCache = {};
     }
     document.getElementById('closeEditModal').onclick = closeEditModalFunc;
     document.getElementById('m-cancelEditBtn').onclick = closeEditModalFunc;
@@ -698,7 +805,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       return /^[\s.,\-_+*=!@#$%^&*()]+$/.test(clean) || /^(.)\1+$/.test(clean);
     }
 
-    // Simpan Perubahan dari Modal Edit dengan Validasi Lengkap
+    // Simpan Perubahan dari Modal Edit dengan Validasi Lengkap & Foto
     document.getElementById('editFormModal').addEventListener('submit', async e=>{
       e.preventDefault();
       const nik = document.getElementById('m-edit-nik').value.trim();
@@ -775,6 +882,11 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
         titik_lokasi: lokasi,
         alamat: alamat
       };
+
+      // Tambahkan foto jika ada di editPhotoCache
+      if(editPhotoCache.foto_ktp) updatedData.foto_ktp = editPhotoCache.foto_ktp;
+      if(editPhotoCache.foto_rumah) updatedData.foto_rumah = editPhotoCache.foto_rumah;
+      if(editPhotoCache.foto_alat_wifi) updatedData.foto_alat_wifi = editPhotoCache.foto_alat_wifi;
 
       try {
         await database.ref('pelanggan_wifi/' + editKey).update(updatedData);
