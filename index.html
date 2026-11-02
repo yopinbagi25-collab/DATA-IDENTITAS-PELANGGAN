@@ -69,9 +69,35 @@ button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:point
 
 .preview{width:100%;height:145px;object-fit:contain;background:#183b56;border-radius:8px;margin-top:10px;display:none}
 .actions{margin-top:24px}
-.records{border-top:0;border-radius:0 0 18px 18px;margin-top:20px}
+.records{border-top:0;border-radius:0 0 18px 18px;margin-top:20px;position:relative;}
+
+/* KHUSUS AREA DAFTAR DATA PELANGGAN YANG BISA DI-SCROLL SENDIRI */
+#recordList {
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #94a3b8 #0b1926;
+}
+#recordList::-webkit-scrollbar {
+  width: 8px;
+}
+#recordList::-webkit-scrollbar-track {
+  background: #0b1926;
+  border-radius: 4px;
+}
+#recordList::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+
 .record{padding:14px;border:1px solid var(--line);border-radius:10px;margin-top:10px;display:flex;justify-content:space-between;gap:12px;align-items:center;background:#0b1926}
 .record strong{display:block;margin-bottom:5px;color:#fff}.record small{color:#9fb3c8}
+
+/* Style Search Box */
+.search-container{margin-bottom:16px;}
+.search-container input{border:1px solid var(--line);background:#0b1926;font-size:13px;border-radius:8px;}
+.search-container input:focus{border-color:var(--blue);}
 
 /* Modal / Popup Style */
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(5,11,18,0.85);display:none;justify-content:center;align-items:center;z-index:9999;padding:16px}
@@ -286,14 +312,23 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
 
 <section class="records">
   <div class="section-title">DATA TERSIMPAN SECARA ONLINE</div>
+  
+  <!-- MENU SEARCH BAR PELANGGAN -->
+  <div class="search-container" id="searchBoxContainer" style="display:none;">
+    <input type="text" id="searchInput" placeholder="🔍 Cari nama, NIK, atau nomor HP pelanggan..." onkeyup="filterPelanggan()">
+  </div>
+
+  <!-- KOTAK LIST DATA INI YANG SEKARANG MEMILIKI SCROLL SENDIRI -->
   <div id="recordList">
     <div style="padding:20px;text-align:center;">
       <p style="color:#9fb3c8;margin-bottom:12px;">Daftar data pelanggan dilindungi untuk keamanan privasi.</p>
       <button type="button" class="primary" id="unlockRecordsBtn">Buka Data Pelanggan</button>
     </div>
   </div>
+
   <div class="actions" style="margin-top:16px;"><button type="button" class="danger" id="clearAll">Hapus Semua Data Online</button></div>
 </section>
+
 <footer>Formulir Data Pelanggan WiFi • Simpan data pribadi dengan aman dan batasi akses hanya kepada petugas yang berwenang.</footer>
 </div>
 
@@ -487,6 +522,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
         return;
       }
       isAdminUnlocked = true;
+      document.getElementById('searchBoxContainer').style.display = 'block';
       loadRecordsToDOM();
     });
 
@@ -508,16 +544,16 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       }
     });
 
-    function loadRecordsToDOM(){
+    function loadRecordsToDOM(dataToRender = currentPelangganData){
       const list = document.getElementById('recordList');
       list.innerHTML = '';
 
-      if (!currentPelangganData.length) {
-        list.innerHTML = '<span class="hint">Belum ada data pelanggan tersimpan di server.</span>';
+      if (!dataToRender.length) {
+        list.innerHTML = '<span class="hint">Tidak ada data pelanggan yang cocok / tersimpan.</span>';
         return;
       }
 
-      currentPelangganData.forEach((r) => {
+      dataToRender.forEach((r) => {
         const div = document.createElement('div');
         div.className = 'record';
         const info = document.createElement('div');
@@ -550,6 +586,22 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
         div.append(info, actions);
         list.append(div);
       });
+    }
+
+    // Fungsi pencarian/filter pelanggan secara realtime
+    function filterPelanggan() {
+      const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+      if (!keyword) {
+        loadRecordsToDOM(currentPelangganData);
+        return;
+      }
+      const filtered = currentPelangganData.filter(r => {
+        const nama = (r.nama || '').toLowerCase();
+        const nik = (r.nik || '').toLowerCase();
+        const hp = (r.nomor_handphone || '').toLowerCase();
+        return nama.includes(keyword) || nik.includes(keyword) || hp.includes(keyword);
+      });
+      loadRecordsToDOM(filtered);
     }
 
     function openDetailModal(r){
@@ -812,4 +864,3 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
 </script>
 </body>
 </html>
-
