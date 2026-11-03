@@ -527,8 +527,9 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
           let width = img.width;
           let height = img.height;
           
-          const MAX_WIDTH = 800;
-          const MAX_HEIGHT = 800;
+          // Ditingkatkan resolusinya agar hasil unduhan lebih tajam (tidak blur)
+          const MAX_WIDTH = 1400;
+          const MAX_HEIGHT = 1400;
           if (width > height) {
             if (width > MAX_WIDTH) {
               height *= MAX_WIDTH / width;
@@ -546,7 +547,8 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
           
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+          // Kualitas kompresi dinaikkan ke 0.9 (90%)
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.9);
           callback(compressedDataUrl);
         };
         img.src = e.target.result;
