@@ -8,6 +8,7 @@
 <!-- Firebase SDK (Version 8 Compatible) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -52,7 +53,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #bfdbfe;border-color:v
 textarea{min-height:82px;resize:vertical}
 .hint{font-size:12px;color:#94a3b8;line-height:1.45}
 .location-row,.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-align:center}
+button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 
 /* Tombol khusus Ambil Lokasi GPS agar lebih kecil & pas */
 #getLocation{padding:8px 12px;font-size:12px;white-space:nowrap;}
@@ -64,8 +65,8 @@ button{border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:point
 .photo-card{border:1px dashed var(--line);border-radius:12px;padding:14px;background:#0b1926;text-align:center;}
 .photo-card label{display:block;margin-bottom:10px;text-align:center;}
 .photo-card .hint{text-align:center;}
-.photo-btn-group{display:flex;gap:6px;justify-content:center;margin-bottom:8px;flex-wrap:wrap;width:100%;}
-.photo-btn-group button{font-size:11px;padding:8px 10px;width:100%;display:inline-flex;justify-content:center;align-items:center;text-align:center;}
+.photo-btn-group{display:flex;gap:6px;justify-content:center;margin-bottom:8px;flex-wrap:wrap;}
+.photo-btn-group button{font-size:11px;padding:8px 10px;}
 
 .preview{width:100%;height:145px;object-fit:contain;background:#183b56;border-radius:8px;margin-top:10px;display:none}
 .actions{margin-top:24px}
@@ -286,43 +287,49 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
     <!-- FOTO KTP -->
     <div class="photo-card">
       <label>FOTO KTP</label>
+      <input id="ktp" type="file" accept="image/*" capture="environment" data-photo="foto_ktp" style="display:none">
       <input id="ktp_galeri" type="file" accept="image/*" data-photo="foto_ktp" style="display:none">
       <div class="photo-btn-group">
-        <button type="button" class="secondary" onclick="document.getElementById('ktp_galeri').click();" style="background:#1e3a5f; width:100%; display:inline-flex; justify-content:center; align-items:center; text-align:center;">🖼️ Pilih Galeri</button>
+        <button type="button" class="secondary" onclick="document.getElementById('ktp').click();">📸 Ambil Kamera</button>
+        <button type="button" class="secondary" onclick="document.getElementById('ktp_galeri').click();" style="background:#1e3a5f;">🖼️ Pilih Galeri</button>
       </div>
       <img class="preview" id="prev-ktp" alt="Pratinjau foto KTP">
       <div style="margin-top:8px;">
         <button type="button" class="secondary" id="dl-btn-ktp" style="display:none;width:100%;font-size:12px;padding:8px;justify-content:center;" onclick="downloadSinglePhoto('foto_ktp', 'ktp')">📥 Unduh Foto KTP</button>
       </div>
-      <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur/gelap</span>
+      <span class="hint" style="margin-top:6px;">Foto asli diunggah tanpa pengecilan resolusi. Maksimal 15 MB.</span>
     </div>
 
     <!-- FOTO DEPAN RUMAH -->
     <div class="photo-card">
       <label>FOTO DEPAN RUMAH</label>
+      <input id="rumah" type="file" accept="image/*" capture="environment" data-photo="foto_rumah" style="display:none">
       <input id="rumah_galeri" type="file" accept="image/*" data-photo="foto_rumah" style="display:none">
       <div class="photo-btn-group">
-        <button type="button" class="secondary" onclick="document.getElementById('rumah_galeri').click();" style="background:#1e3a5f; width:100%; display:inline-flex; justify-content:center; align-items:center; text-align:center;">🖼️ Pilih Galeri</button>
+        <button type="button" class="secondary" onclick="document.getElementById('rumah').click();">📸 Ambil Kamera</button>
+        <button type="button" class="secondary" onclick="document.getElementById('rumah_galeri').click();" style="background:#1e3a5f;">🖼️ Pilih Galeri</button>
       </div>
       <img class="preview" id="prev-rumah" alt="Pratinjau foto rumah">
       <div style="margin-top:8px;">
         <button type="button" class="secondary" id="dl-btn-rumah" style="display:none;width:100%;font-size:12px;padding:8px;justify-content:center;" onclick="downloadSinglePhoto('foto_rumah', 'rumah')">📥 Unduh Foto Rumah</button>
       </div>
-      <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur/gelap</span>
+      <span class="hint" style="margin-top:6px;">Foto asli diunggah tanpa pengecilan resolusi. Maksimal 15 MB.</span>
     </div>
 
     <!-- FOTO ALAT WIFI -->
     <div class="photo-card">
       <label>FOTO ALAT WIFI YANG TERPASANG</label>
+      <input id="alat" type="file" accept="image/*" capture="environment" data-photo="foto_alat_wifi" style="display:none">
       <input id="alat_galeri" type="file" accept="image/*" data-photo="foto_alat_wifi" style="display:none">
       <div class="photo-btn-group">
-        <button type="button" class="secondary" onclick="document.getElementById('alat_galeri').click();" style="background:#1e3a5f; width:100%; display:inline-flex; justify-content:center; align-items:center; text-align:center;">🖼️ Pilih Galeri</button>
+        <button type="button" class="secondary" onclick="document.getElementById('alat').click();">📸 Ambil Kamera</button>
+        <button type="button" class="secondary" onclick="document.getElementById('alat_galeri').click();" style="background:#1e3a5f;">🖼️ Pilih Galeri</button>
       </div>
       <img class="preview" id="prev-alat" alt="Pratinjau alat WiFi">
       <div style="margin-top:8px;">
         <button type="button" class="secondary" id="dl-btn-alat" style="display:none;width:100%;font-size:12px;padding:8px;justify-content:center;" onclick="downloadSinglePhoto('foto_alat_wifi', 'alat')">📥 Unduh Foto Alat WiFi</button>
       </div>
-      <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur/gelap</span>
+      <span class="hint" style="margin-top:6px;">Foto asli diunggah tanpa pengecilan resolusi. Maksimal 15 MB.</span>
     </div>
   </div>
 
@@ -334,7 +341,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
     <input type="file" id="importJsonFile" accept=".json" style="display:none">
     <button class="secondary" type="button" id="adminPrintForm">CETAK FORMULIR</button>
   </div>
-  <p class="hint">Data yang disimpan tersimpan di perangkat ini dan terkirim otomatis ke Realtime Database</p>
+  <p class="hint" id="uploadStatus" role="status" aria-live="polite">Data pelanggan disimpan ke Realtime Database; foto asli berkualitas tinggi diunggah ke Firebase Storage.</p>
 </form>
 
 <section class="records">
@@ -435,34 +442,40 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
         <!-- EDIT FOTO KTP -->
         <div class="photo-card">
           <label style="font-size:12px;">FOTO KTP</label>
+          <input id="m-edit-ktp" type="file" accept="image/*" capture="environment" style="display:none">
           <input id="m-edit-ktp-galeri" type="file" accept="image/*" style="display:none">
           <div class="photo-btn-group">
-            <button type="button" class="secondary" onclick="document.getElementById('m-edit-ktp-galeri').click();" style="background:#1e3a5f; width:100%; display:inline-flex; justify-content:center; align-items:center; text-align:center;">🖼️ Pilih Galeri</button>
+            <button type="button" class="secondary" onclick="document.getElementById('m-edit-ktp').click();">📸 Ambil Kamera</button>
+            <button type="button" class="secondary" onclick="document.getElementById('m-edit-ktp-galeri').click();" style="background:#1e3a5f;">🖼️ Pilih Galeri</button>
           </div>
           <img class="preview" id="m-edit-prev-ktp" alt="Pratinjau foto KTP">
-          <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur/gelap</span>
+          <span class="hint" style="margin-top:6px;">Foto asli diunggah tanpa pengecilan resolusi. Maksimal 15 MB.</span>
         </div>
 
         <!-- EDIT FOTO DEPAN RUMAH -->
         <div class="photo-card">
           <label style="font-size:12px;">FOTO DEPAN RUMAH</label>
+          <input id="m-edit-rumah" type="file" accept="image/*" capture="environment" style="display:none">
           <input id="m-edit-rumah-galeri" type="file" accept="image/*" style="display:none">
           <div class="photo-btn-group">
-            <button type="button" class="secondary" onclick="document.getElementById('m-edit-rumah-galeri').click();" style="background:#1e3a5f; width:100%; display:inline-flex; justify-content:center; align-items:center; text-align:center;">🖼️ Pilih Galeri</button>
+            <button type="button" class="secondary" onclick="document.getElementById('m-edit-rumah').click();">📸 Ambil Kamera</button>
+            <button type="button" class="secondary" onclick="document.getElementById('m-edit-rumah-galeri').click();" style="background:#1e3a5f;">🖼️ Pilih Galeri</button>
           </div>
           <img class="preview" id="m-edit-prev-rumah" alt="Pratinjau foto rumah">
-          <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur/gelap</span>
+          <span class="hint" style="margin-top:6px;">Foto asli diunggah tanpa pengecilan resolusi. Maksimal 15 MB.</span>
         </div>
 
         <!-- EDIT FOTO ALAT WIFI -->
         <div class="photo-card">
           <label style="font-size:12px;">FOTO ALAT WIFI YANG TERPASANG</label>
+          <input id="m-edit-alat" type="file" accept="image/*" capture="environment" style="display:none">
           <input id="m-edit-alat-galeri" type="file" accept="image/*" style="display:none">
           <div class="photo-btn-group">
-            <button type="button" class="secondary" onclick="document.getElementById('m-edit-alat-galeri').click();" style="background:#1e3a5f; width:100%; display:inline-flex; justify-content:center; align-items:center; text-align:center;">🖼️ Pilih Galeri</button>
+            <button type="button" class="secondary" onclick="document.getElementById('m-edit-alat').click();">📸 Ambil Kamera</button>
+            <button type="button" class="secondary" onclick="document.getElementById('m-edit-alat-galeri').click();" style="background:#1e3a5f;">🖼️ Pilih Galeri</button>
           </div>
           <img class="preview" id="m-edit-prev-alat" alt="Pratinjau alat WiFi">
-          <span class="hint" style="margin-top:6px;">Pastikan foto jelas jangan sampai blur/gelap</span>
+          <span class="hint" style="margin-top:6px;">Foto asli diunggah tanpa pengecilan resolusi. Maksimal 15 MB.</span>
         </div>
       </div>
 
@@ -497,49 +510,49 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
 
     // Konfigurasi Database Online Firebase
     const firebaseConfig = {
+      // Pastikan nama bucket ini sama persis dengan Firebase Console > Storage.
+      // Jika Console menampilkan ...appspot.com, ganti nilai di bawah sesuai Console.
+      storageBucket: "nsnet-data-pelanggan.firebasestorage.app",
       databaseURL: "https://nsnet-data-pelanggan-default-rtdb.firebaseio.com"
     };
 
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
+    const storage = firebase.storage();
+    const storageReady = !!firebaseConfig.storageBucket;
     let currentPelangganData = [];
 
     const form = document.getElementById('customerForm');
 
-    function compressImage(file, callback) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-          
-          const MAX_WIDTH = 800;
-          const MAX_HEIGHT = 800;
-          if (width > height) {
-            if (width > MAX_WIDTH) {
-              height *= MAX_WIDTH / width;
-              width = MAX_WIDTH;
-            }
-          } else {
-            if (height > MAX_HEIGHT) {
-              width *= MAX_HEIGHT / height;
-              height = MAX_HEIGHT;
-            }
+    // Foto diunggah dalam file asli, bukan JPEG 800px/70% seperti versi lama.
+    function showLocalPreview(file, img) {
+      if (!file || !file.type || !file.type.startsWith('image/')) throw new Error('File harus berupa gambar.');
+      if (file.size > 15 * 1024 * 1024) throw new Error('Ukuran foto maksimal 15 MB. Pilih foto yang lebih kecil.');
+      if (img.dataset.objectUrl) URL.revokeObjectURL(img.dataset.objectUrl);
+      const localUrl = URL.createObjectURL(file);
+      img.dataset.objectUrl = localUrl;
+      img.src = localUrl;
+      img.style.display = 'block';
+    }
+
+    function uploadPhoto(file, customerKey, photoKey) {
+      if (!(file instanceof File)) return Promise.resolve(file || '');
+      const safeName = (file.name || photoKey + '.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
+      const path = 'pelanggan_wifi/' + customerKey + '/' + photoKey + '_' + Date.now() + '_' + safeName;
+      const task = storage.ref().child(path).put(file, { contentType: file.type || 'image/jpeg' });
+      return new Promise((resolve, reject) => {
+        task.on('state_changed',
+          snapshot => {
+            const pct = snapshot.totalBytes ? Math.round(snapshot.bytesTransferred / snapshot.totalBytes * 100) : 0;
+            document.getElementById('uploadStatus').textContent = 'Mengunggah ' + photoKey.replaceAll('_',' ') + ': ' + pct + '%';
+          },
+          reject,
+          async () => {
+            try { resolve(await task.snapshot.ref.getDownloadURL()); }
+            catch (err) { reject(err); }
           }
-          
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
-          callback(compressedDataUrl);
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
+        );
+      });
     }
 
     const photoInputs=[...document.querySelectorAll('input[type="file"][data-photo]')];
@@ -549,23 +562,26 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       const dlBtn=document.getElementById('dl-btn-'+baseId);
       const file=input.files && input.files[0];
       if(file){
-        compressImage(file, function(compressedUrl) {
-          img.src = compressedUrl;
-          img.style.display = 'block';
+        try {
+          showLocalPreview(file, img);
           if(dlBtn) dlBtn.style.display = 'inline-flex';
-          photoCache[input.dataset.photo] = compressedUrl;
-        });
+          photoCache[input.dataset.photo] = file;
+        } catch(err) {
+          input.value = '';
+          alert(err.message);
+        }
       }else{
         img.removeAttribute('src');
         img.style.display='none';
         if(dlBtn) dlBtn.style.display='none';
+        delete photoCache[input.dataset.photo];
       }
     }));
 
     const editPhotoConfig = [
-      { ids: ['m-edit-ktp-galeri'], prevId: 'm-edit-prev-ktp', key: 'foto_ktp' },
-      { ids: ['m-edit-rumah-galeri'], prevId: 'm-edit-prev-rumah', key: 'foto_rumah' },
-      { ids: ['m-edit-alat-galeri'], prevId: 'm-edit-prev-alat', key: 'foto_alat_wifi' }
+      { ids: ['m-edit-ktp', 'm-edit-ktp-galeri'], prevId: 'm-edit-prev-ktp', key: 'foto_ktp' },
+      { ids: ['m-edit-rumah', 'm-edit-rumah-galeri'], prevId: 'm-edit-prev-rumah', key: 'foto_rumah' },
+      { ids: ['m-edit-alat', 'm-edit-alat-galeri'], prevId: 'm-edit-prev-alat', key: 'foto_alat_wifi' }
     ];
 
     editPhotoConfig.forEach(config => {
@@ -576,24 +592,28 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
           const file = inputElem.files && inputElem.files[0];
           const img = document.getElementById(config.prevId);
           if(file){
-            compressImage(file, function(compressedUrl) {
-              img.src = compressedUrl;
-              img.style.display = 'block';
-              editPhotoCache[config.key] = compressedUrl;
-            });
+            try {
+              showLocalPreview(file, img);
+              editPhotoCache[config.key] = file;
+            } catch(err) {
+              inputElem.value = '';
+              alert(err.message);
+            }
           }
         });
       });
     });
 
     function downloadSinglePhoto(photoKey, typeName){
-      const url = photoCache[photoKey];
-      if(!url){alert('Tidak ada foto untuk diunduh.');return;}
+      const file = photoCache[photoKey];
+      if(!file){alert('Pilih foto terlebih dahulu.');return;}
+      const url = URL.createObjectURL(file);
       const a = document.createElement('a');
       a.href = url;
       const nikVal = document.getElementById('nik').value.trim() || 'pelanggan';
-      a.download = `foto-${typeName}-${nikVal}.jpg`;
-      a.click();
+      a.download = `foto-${typeName}-${nikVal}.${(file.name.split('.').pop() || 'jpg')}`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
     }
 
     document.getElementById('getLocation').addEventListener('click',()=>{
@@ -760,11 +780,23 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       document.getElementById('detailModal').style.display = 'flex';
     }
 
-    function triggerDownload(dataUrl, filename){
-      const a = document.createElement('a');
-      a.href = dataUrl;
-      a.download = filename + '.jpg';
-      a.click();
+    async function triggerDownload(imageUrl, filename){
+      if (!imageUrl) return;
+      try {
+        const response = await fetch(imageUrl);
+        if (!response.ok) throw new Error('Unduhan tidak berhasil');
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        const ext = (blob.type.split('/')[1] || 'jpg').replace('jpeg','jpg');
+        const a = document.createElement('a');
+        a.href = objectUrl;
+        a.download = filename + '.' + ext;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 2000);
+      } catch (err) {
+        window.open(imageUrl, '_blank', 'noopener');
+        alert('Foto dibuka di tab baru. Gunakan menu browser > Simpan gambar untuk arsip.');
+      }
     }
 
     function closeModalFunc(){
@@ -875,12 +907,16 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
         titik_lokasi: lokasi, alamat: alamat
       };
 
-      if(editPhotoCache.foto_ktp) updatedData.foto_ktp = editPhotoCache.foto_ktp;
-      if(editPhotoCache.foto_rumah) updatedData.foto_rumah = editPhotoCache.foto_rumah;
-      if(editPhotoCache.foto_alat_wifi) updatedData.foto_alat_wifi = editPhotoCache.foto_alat_wifi;
-
       try {
+        for (const key of ['foto_ktp','foto_rumah','foto_alat_wifi']) {
+          if (editPhotoCache[key]) {
+            updatedData[key] = editPhotoCache[key] instanceof File
+              ? await uploadPhoto(editPhotoCache[key], editKey, key)
+              : editPhotoCache[key];
+          }
+        }
         await database.ref('pelanggan_wifi/' + editKey).update(updatedData);
+        document.getElementById('uploadStatus').textContent = 'Perubahan data berhasil disimpan.';
         alert('Data berhasil diperbarui!');
         closeEditModalFunc();
       } catch(err) {
@@ -922,17 +958,22 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       new FormData(form).forEach((v,k)=>{if(typeof v==='string')data[k]=v.trim()});
       data.dibuat_pada = new Date().toISOString();
       data.timestamp = firebase.database.ServerValue.TIMESTAMP;
-      if(photoCache.foto_ktp) data.foto_ktp = photoCache.foto_ktp;
-      if(photoCache.foto_rumah) data.foto_rumah = photoCache.foto_rumah;
-      if(photoCache.foto_alat_wifi) data.foto_alat_wifi = photoCache.foto_alat_wifi;
 
       try {
-        await database.ref('pelanggan_wifi').push(data);
+        const newRef = database.ref('pelanggan_wifi').push();
+        const customerKey = newRef.key;
+        for (const key of ['foto_ktp','foto_rumah','foto_alat_wifi']) {
+          if (photoCache[key]) data[key] = await uploadPhoto(photoCache[key], customerKey, key);
+        }
+        document.getElementById('uploadStatus').textContent = 'Menyimpan data pelanggan...';
+        await newRef.set(data);
+        document.getElementById('uploadStatus').textContent = 'Berhasil! Data tersimpan dan foto asli ada di Firebase Storage.';
         alert('Data berhasil disimpan!');
         form.reset();
         photoCache = {};
       } catch(err) {
-        alert('Gagal menyimpan: ' + err.message);
+        document.getElementById('uploadStatus').textContent = 'Pengiriman gagal: ' + err.message;
+        alert('Gagal menyimpan: ' + err.message + '\\nPeriksa koneksi internet, konfigurasi Firebase Storage, dan Storage Rules.');
       } finally {
         submitBtn.textContent = 'SIMPAN DATA';
         submitBtn.disabled = false;
@@ -1018,7 +1059,7 @@ footer{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0}
       }
     });
 
-    form.addEventListener('reset',()=>{setTimeout(()=>{photoInputs.forEach(input=>{const baseId=input.id.replace('_galeri','');const img=document.getElementById('prev-'+baseId);if(img){img.removeAttribute('src');img.style.display='none';}const dlBtn=document.getElementById('dl-btn-'+baseId);if(dlBtn)dlBtn.style.display='none';});document.getElementById('editKey').value='';document.getElementById('submitBtn').textContent='SIMPAN DATA';photoCache={};},0)});
+    form.addEventListener('reset',()=>{setTimeout(()=>{photoInputs.forEach(input=>{const baseId=input.id.replace('_galeri','');const img=document.getElementById('prev-'+baseId);if(img){if(img.dataset.objectUrl)URL.revokeObjectURL(img.dataset.objectUrl);img.removeAttribute('src');img.style.display='none';delete img.dataset.objectUrl;}const dlBtn=document.getElementById('dl-btn-'+baseId);if(dlBtn)dlBtn.style.display='none';});document.getElementById('editKey').value='';document.getElementById('submitBtn').textContent='SIMPAN DATA';photoCache={};},0)});
 </script>
 </body>
 </html>
